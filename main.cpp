@@ -14,8 +14,8 @@ using namespace std;
 
 ifstream infile;
 ofstream outfile;
-list<SimpleList<int> *> listSLi; // all integer stacks and queues
-list<SimpleList<double> *> listSLd; // all double stacks and queues
+list<SimpleList<int> *> listSLi;    // all integer stacks and queues
+list<SimpleList<double *> listSLd;  // all double stacks and queues
 list<SimpleList<string> *> listSLs; // all string stacks and queues
 
 
@@ -24,8 +24,17 @@ int main()
     OpenInputFile(infile);
     OpenOutputFile(outfile);
 
-    //open the file
+    string inLine;
+    while (getline(infile, inLine))
+    {
+	ProcessLine(inLine);
+    }
+
+    return 0;
 }
+
+
+// prompts user for input file and opens it for reading
 
 void OpenInputFile(ifstream FileIn)
 {
@@ -35,7 +44,7 @@ void OpenInputFile(ifstream FileIn)
     FileIn.open(FileNameIn.c_str());
 }
 
-
+// prompts user for output file and opens it for writing
 void OpenOutputFile(ofstream FileOut)
 {
     string FileNameOut;
@@ -45,9 +54,12 @@ void OpenOutputFile(ofstream FileOut)
 }
 
 
-
+// processes line in file
 void ProcessLine(string line)
 {
+
+
+
     // read the line
     // split line into three words: command, name, and value (if any)
     
@@ -63,30 +75,65 @@ void ProcessLine(string line)
 
 }
 
+
+// creates a class that sets up a singly linked list from which the stacks
+// and queues are derived
+
 template <typename T> 
-class SimpleList
+class SimpleList(string name)
 {
     public:
-	SimpleList(string name);
-	virtual void insertAtStart(T value)=0; // push for stacks
-	virtual void insertAtEnd(T value)=0; // push for queues
-	virtual T removeFromStart()=0; // pop for both stacks and queues
+	SimpleList(string name)
+	{
+	    listName = name;
+	    start = NULL;
+	    end = NULL;
+	};
+
+	virtual void push(T value)=0;
+	virtual T pop()=0;
 	string getListName();
+	bool isEmpty() const;
 
     private:
+	struct Node
+	{
+	    int data;
+	    node *next;
+	};
 
-        class Node(T value, nextNode)
-        {
-            public:
-            T data = 0; // TODO: replace this with whatever you read in
-            // figure out how to do the pointer thing here
-        }
-
+    protected:
+	void insertAtStart(T data);	// push for stack
+	void insertAtEnd(T data);	// push for queue
+	T removeFromStart();		// pops
 };
 
 
+// getter function for the list name
 template <typename T>
-class Stack : SimpleList<T>
+string SimpleList<T>::getListName()
+{
+    return listName;
+}
+
+
+// checks if the list is empty
+bool isEmpty() const
+{
+    if (start == NULL)
+    {
+	return true;
+    }
+    else
+    {
+	return false;
+    }
+}
+
+
+// creates Stack derived class
+template <typename T>
+class Stack:SimpleList<T>
 {
 
 
@@ -95,38 +142,45 @@ class Stack : SimpleList<T>
 	void pop();    
 };
 
+
+// allows user to push to stacks
 template <typename T>
 Stack::push(T value)
 {
     Stack::insertAtStart(T value);
-};
+}
 
+// allows user to pop from stacks
 template <typename T>
 T Stack::pop()
 {
     Stack::removeFromStart();
-};
+}
 
 
+// creates Queue derived class
 template <typename T>
-class Queue : SimpleList<T>
+class Queue:SimpleList<T>
 {
     public:
 	void push(T value);
 	void pop();
 };
 
+
+// allows user to push to queues
 template <typename T>
 Queue::push(T value)
 {
     Queue::insertAtEnd(T value);
-};
+}
 
+// allows user to pop from queues
 template <typename T>
 T Queue::pop(T value)
 {
     Queue::removeFromStart();
-};
+}
 
 
 

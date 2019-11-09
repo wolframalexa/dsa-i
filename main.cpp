@@ -1,6 +1,9 @@
 #include <iostream>  // use standard in/out
-#include <list>      // use lists
+#include <list>      // use lists class
 #include <fstream>   // open/close files
+#include <string>    // use string class
+
+
 using namespace std;
 
 /*  Alexa Jakob
@@ -9,13 +12,39 @@ using namespace std;
     from stacks and queues, and writes to an output file.
 */
 
+ifstream infile;
+ofstream outfile;
+list<SimpleList<int> *> listSLi; // all integer stacks and queues
+list<SimpleList<double> *> listSLd; // all double stacks and queues
+list<SimpleList<string> *> listSLs; // all string stacks and queues
+
+
 int main()
 {
-    // list<SimpleList<int> *> listSLi; // all integer stacks and queues
-    // list<SimpleList<double> *> listSLd; // all double stacks and queues
-    // list<SimpleList<string> *> listSLs; // all string stacks and queues
+    OpenInputFile(infile);
+    OpenOutputFile(outfile);
 
+    //open the file
 }
+
+void OpenInputFile(ifstream FileIn)
+{
+    string FileNameIn;
+    cout << "Enter name of input file: ";
+    cin >> FileNameIn;
+    FileIn.open(FileNameIn.c_str());
+}
+
+
+void OpenOutputFile(ofstream FileOut)
+{
+    string FileNameOut;
+    cout << "Enter name of output file: ";
+    cin >> FileNameOut;
+    FileOut.open(FileNameOut.c_str());
+}
+
+
 
 void ProcessLine(string line)
 {

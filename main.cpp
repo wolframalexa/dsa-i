@@ -3,6 +3,10 @@
 #include <fstream>  // open/close files 
 #include <string>   // use string class 
 #include <iterator> // use iterators
+#include <stdlib.h> // use atoi, atof
+#include <sstream>  // use stringstream
+
+
 
 using namespace std;
 
@@ -23,32 +27,41 @@ template <typename T>
 class SimpleList
 {
     public:
-        SimpleList(string name);
         virtual void push(T value)=0;
         virtual T pop()=0;
         string getListName();
         bool isEmpty() const;
 
     private:
+	SimpleList(string ListName);
 
         struct Node
         { 
-	    Node(T val, Node* next)
+	    Node* next;
+
+	    Node(T val, Node* pointer)
 	    {
 		T entry = val;
-		Node *next;
+		next = pointer;
 	    }
         };
 
 	Node *start = NULL;
         Node *end = NULL;
-	string listName = name;
+	string listName = listName;
 
     protected:
         void insertAtStart(T val);
         void insertAtEnd(T val);
         T removeFromStart();
 };
+
+
+
+list<SimpleList<double> *> listSLd;  // all double stacks and queues
+list<SimpleList<int> *> listSLi;    // all integer stacks and queues
+list<SimpleList<string> *> listSLs; // all string stacks and queues
+
 
 // prompts user for file and opens it for reading
 
@@ -78,6 +91,7 @@ void ReadAndFollowCommand(string line)
     outfile << "PROCESSING COMMAND: " << line << "\n";
     istringstream linestream(line);
     string word;
+    string command[2];
     
     int i = 0;
     while (linestream >> word)
@@ -288,11 +302,6 @@ T Queue<T>::pop(T value)
 {
     Queue<T>::removeFromStart();
 }
-
-
-list<SimpleList<int> *> listSLi;    // all integer stacks and queues
-list<SimpleList<double *> listSLd;  // all double stacks and queues
-list<SimpleList<string> *> listSLs; // all string stacks and queues
 
 
 int main()

@@ -155,7 +155,7 @@ void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T data)
 
     if (command[0] == "push")
     {
-	if (ListSearch(listofLists, command[1] == false)
+	if (ListSearch(listOfLists, command[1] == false)
 	{
 	    outfile << "ERROR: This name does not exist!\n";
 	}

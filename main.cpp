@@ -1,8 +1,8 @@
-#include <iostream>  // use standard in/out
-#include <list>      // use lists class
-#include <fstream>   // open/close files
-#include <string>    // use string class
-
+#include <iostream> // use standard in/out 
+#include <list>     // use lists 
+#include <fstream>  // open/close files 
+#include <string>   // use string class 
+#include <iterator> // use iterators
 
 using namespace std;
 
@@ -12,11 +12,15 @@ using namespace std;
     from stacks and queues, and writes to an output file.
 */
 
+ifstream infile;
+ofstream outfile;
+
+
 // creates a class that sets up a singly linked list from which the stacks
 // and queues are derived
 
 template <typename T>
-class SimpleList<T>(string name)
+class SimpleList
 {
     public:
         SimpleList(string name);
@@ -26,33 +30,25 @@ class SimpleList<T>(string name)
         bool isEmpty() const;
 
     private:
-        struct Node(T data, Node* next)
-        {
-	    T entry = data;
-	    ptr = next;
+
+        struct Node
+        { 
+	    Node(T val, Node* next)
+	    {
+		T entry = val;
+		Node *next;
+	    }
         };
 
-	Node *start;
-        Node *end;
-	
-	string listName;
+	Node *start = NULL;
+        Node *end = NULL;
+	string listName = name;
 
     protected:
-        void insertAtStart(T data);
-        void insertAtEnd(T data);
+        void insertAtStart(T val);
+        void insertAtEnd(T val);
         T removeFromStart();
 };
-
-
-// constructor for SimpleList
-SimpleList<T>::SimpleList(string name)
-{
-    listName = name;
-    start = NULL;
-    end = NULL;
-
-}
-
 
 // prompts user for file and opens it for reading
 
@@ -218,21 +214,47 @@ bool SimpleList<T>::isEmpty() const
 }
 
 
+template <typename T>
+void SimpleList<T>::insertAtStart(T data)
+{
+    Node *newNode = new Node(data, start);
+    start = newNode;
+}
+
+template<typename T>
+void SimpleList<T>::insertAtEnd(T data)
+{
+    Node *newNode = new Node(data, NULL); // no node after it
+    end = newNode;
+}
+
+template <typename T>
+T SimpleList<T>::removeFromStart()
+{
+    Node *ptr = start;
+    T data = pointer->entry;    
+    start = pointer->next;
+    delete pointer;
+    pointer = NULL;
+    return data;
+}
+
+
 // creates Stack derived class
 template <typename T>
 class Stack<T>:SimpleList<T>
 {
     public:
-	void push(T value);
+	void push(T data);
 	void pop();    
 };
 
 
 // allows user to push to stacks
 template <typename T>
-Stack<T>::push(T value)
+void Stack<T>::push(T data)
 {
-    Stack<T>::insertAtStart(T value);
+    Stack<T>::insertAtStart(T data);
 }
 
 // allows user to pop from stacks
@@ -268,8 +290,6 @@ T Queue<T>::pop(T value)
 }
 
 
-ifstream infile;
-ofstream outfile;
 list<SimpleList<int> *> listSLi;    // all integer stacks and queues
 list<SimpleList<double *> listSLd;  // all double stacks and queues
 list<SimpleList<string> *> listSLs; // all string stacks and queues

@@ -135,11 +135,11 @@ T Queue<T>::pop()
 
 // using the output from the ReadCommand function, follow the appropriate comma                        >
 template <typename T>
-void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T data)
+void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T val)
 {
     if (command[0] == "create")
     {
-        if (ListSearch(listOfLists,command[1]))
+        if (NameExists(listOfLists,command[1]))
         {
             outfile << "ERROR: This name already exists!\n";
         }
@@ -159,20 +159,21 @@ void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T data)
 
     if (command[0] == "push")
     {
-        if (ListSearch(listOfLists, command[1]))
+        if (NameExists(listOfLists, command[1]))
         {
             outfile << "ERROR: This name does not exist!\n";
         }
 
         else
         {
-            command[1].push(data); // TODO: implement using pointers?
+            SimpleList<T> *ptr = ListSearch(listOfLists, command[1]); // push this to the appropriate stack/queue 
+	    ptr->push(val);
         }
     }
 
     if (command[0] == "pop")
     {
-        if (ListSearch(listofLists, command[1]))
+        if (NameExists(listOfLists, command[1]))
         {
             outfile << "ERROR: This name does not exist!\n";
         }
@@ -184,7 +185,8 @@ void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T data)
 
         else
         {
-            command[1].pop(data); //TODO: implement using pointers?
+	    SimpleList<T> *ptr = ListSearch(listOfLists, command[1]);
+	    ptr->pop();
         }
     }
 }
@@ -238,7 +240,7 @@ void ReadAndFollowCommand(string line)
 
 
 template <typename T>
-bool ListSearch(list<SimpleList<T> *> listOfLists, string listname)
+bool NameExists(list<SimpleList<T> *> listOfLists, string listname)
 {
     list<SimpleList<T> *>::iterator it;
 
@@ -255,6 +257,21 @@ bool ListSearch(list<SimpleList<T> *> listOfLists, string listname)
     return false;
 }
 
+template <typename T>
+string ListSearch(list<SimpleList<T> *> listOfLists, string listname)
+{
+    list<SimpleList<T> *>::iterator it;
+
+    for (it = listOfLists.begin(); it != listOfLists.end(); it++)
+    {
+	string name = (*it)->name;
+	if (name == listname)
+	{
+	    return listname;
+	}
+    }
+    return NULL;
+}
 
 // getter function for the list name
 template <typename T>
@@ -296,7 +313,8 @@ void SimpleList<T>::insertAtEnd(T data)
 template <typename T>
 T SimpleList<T>::removeFromStart()
 {
-    Node *ptr = start;
+
+    Node *pointer = start;
     T data = pointer->entry;    
     start = pointer->next;
     delete pointer;

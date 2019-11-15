@@ -83,6 +83,114 @@ void OpenOutputFile(ofstream FileOut)
 }
 
 
+// creates Stack derived class
+template <typename T>
+class Stack:SimpleList<T>
+{
+    public:
+        void push(T data);
+        T pop();
+};
+
+
+// allows user to push to stacks
+template <typename T>
+void Stack<T>::push(T val)
+{
+    Stack<T>::insertAtStart(T val);
+}
+
+// allows user to pop from stacks
+template <typename T>
+T Stack<T>::pop()
+{
+    Stack<T>::removeFromStart();
+}
+
+
+// creates Queue derived class
+template <typename T>
+class Queue:SimpleList<T>
+{
+    public:
+        void push(T value);
+        T pop();
+};
+
+
+// allows user to push to queues
+template <typename T>
+void Queue<T>::push(T val)
+{
+    Queue<T>::insertAtEnd(T val);
+}
+
+// allows user to pop from queues
+template <typename T>
+T Queue<T>::pop()
+{
+    Queue<T>::removeFromStart();
+}
+
+
+// using the output from the ReadCommand function, follow the appropriate comma                        >
+template <typename T>
+void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T data)
+{
+    if (command[0] == "create")
+    {
+        if (ListSearch(listOfLists,command[1]))
+        {
+            outfile << "ERROR: This name already exists!\n";
+        }
+
+        else if (command[2] == "queue\0") //input was null terminated
+        {
+            Queue<T>* ptr = new Queue<T>(command[1]);
+            listOfLists.insertAtStart(ptr);
+        }
+
+        else if (command[2] = "stack\0")
+        {
+            Stack<T>* ptr = new Stack<T>(command[1]);
+            listOfLists.insertAtStart(ptr);
+        }
+    }
+
+    if (command[0] == "push")
+    {
+        if (ListSearch(listOfLists, command[1]))
+        {
+            outfile << "ERROR: This name does not exist!\n";
+        }
+
+        else
+        {
+            command[1].push(data); // TODO: implement using pointers?
+        }
+    }
+
+    if (command[0] == "pop")
+    {
+        if (ListSearch(listofLists, command[1]))
+        {
+            outfile << "ERROR: This name does not exist!\n";
+        }
+
+        else if (command[1].isEmpty())
+        {
+            outfile << "ERROR: This list is empty!\n";
+        }
+
+        else
+        {
+            command[1].pop(data); //TODO: implement using pointers?
+        }
+    }
+}
+
+
+
 // processes line in file and splits it into three words. If the command is
 // pop, command[2] should be empty
 
@@ -104,7 +212,7 @@ void ReadAndFollowCommand(string line)
     if (command[1].substr(0,1) == "i")
     {
 	int data = 0;
-	if (command[2].empty() == false)
+	if (command[2].empty())
 	{
 	    data = atoi(command[2].c_str()); //atoi only works on C-style strings
 	    FollowCommand(listSLi, command, data);
@@ -114,7 +222,7 @@ void ReadAndFollowCommand(string line)
     else if (command[1].substr(0,1) == "d")
     {
 	double data = 0;
-	if (command[2].empty() == false)
+	if (command[2].empty())
 	{
 	    data = atof(command[2].c_str());
 	    FollowCommand(listSLd, command, data);
@@ -125,63 +233,6 @@ void ReadAndFollowCommand(string line)
     {
 	string data = command[2];
 	FollowCommand(listSLs, command, data);
-    }
-}
-
-
-// using the output from the ReadCommand function, follow the appropriate commands
-template <typename T>
-void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T data)
-{
-    if (command[0] == "create")
-    {
-	if (ListSearch(listOfLists,command[1]) == true)
-	{
-	    outfile << "ERROR: This name already exists!\n";
-	}
-
-	else if (command[2] == "queue\0") //input was null terminated
-	{
-	    Queue<T>* ptr = new Queue<T>(command[1]);
-	    listOfLists.insertAtStart(ptr);
-	}
-
-	else if (command[2] = "stack\0")
-	{
-	    Stack<T>* ptr = new Stack<T>(command[1]);
-	    listOfLists.insertAtStart(ptr);
-	}
-    }
-
-    if (command[0] == "push")
-    {
-	if (ListSearch(listOfLists, command[1] == false)
-	{
-	    outfile << "ERROR: This name does not exist!\n";
-	}
-
-	else
-	{
-	    command[1].push(data); // TODO: implement using pointers?
-	}
-    }
-
-    if (command[0] == "pop")
-    {
-	if (ListSearch(listofLists, command[1] == false)
-	{
-	    outfile << "ERROR: This name does not exist!\n";
-	}
-
-	else if (command[1].isEmpty() == true)
-	{
-	    outfile << "ERROR: This list is empty!\n";
-	}
-
-	else
-	{
-	    command[1].pop(data); //TODO: implement using pointers?
-	}
     }
 }
 
@@ -254,16 +305,6 @@ T SimpleList<T>::removeFromStart()
 }
 
 
-// creates Stack derived class
-template <typename T>
-class Stack<T>:SimpleList<T>
-{
-    public:
-	void push(T data);
-	void pop();    
-};
-
-
 // allows user to push to stacks
 template <typename T>
 void Stack<T>::push(T data)
@@ -271,37 +312,6 @@ void Stack<T>::push(T data)
     Stack<T>::insertAtStart(T data);
 }
 
-// allows user to pop from stacks
-template <typename T>
-T Stack<T>::pop()
-{
-    Stack<T>::removeFromStart();
-}
-
-
-// creates Queue derived class
-template <typename T>
-class Queue<T>:SimpleList<T>
-{
-    public:
-	void push(T value);
-	void pop();
-};
-
-
-// allows user to push to queues
-template <typename T>
-Queue<T>::push(T value)
-{
-    Queue<T>::insertAtEnd(T value);
-}
-
-// allows user to pop from queues
-template <typename T>
-T Queue<T>::pop(T value)
-{
-    Queue<T>::removeFromStart();
-}
 
 
 int main()

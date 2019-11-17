@@ -173,12 +173,14 @@ void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T val)
 
     if (command[0] == "pop")
     {
+	SimpleList<T> *ptr = ListSearch(listOfLists, command[1]);
+
         if (NameExists(listOfLists, command[1]))
         {
             outfile << "ERROR: This name does not exist!\n";
         }
 
-        else if (command[1].isEmpty())
+        else if (ptr->isEmpty())
         {
             outfile << "ERROR: This list is empty!\n";
         }
@@ -242,7 +244,7 @@ void ReadAndFollowCommand(string line)
 template <typename T>
 bool NameExists(list<SimpleList<T> *> listOfLists, string listname)
 {
-    list<SimpleList<T> *>::iterator it;
+    typename list<SimpleList<T> *>::iterator it;
 
     for (it = listOfLists.begin(); it != listOfLists.end(); it++)
     {
@@ -260,7 +262,7 @@ bool NameExists(list<SimpleList<T> *> listOfLists, string listname)
 template <typename T>
 string ListSearch(list<SimpleList<T> *> listOfLists, string listname)
 {
-    list<SimpleList<T> *>::iterator it;
+    typename list<SimpleList<T> *>::iterator it;
 
     for (it = listOfLists.begin(); it != listOfLists.end(); it++)
     {

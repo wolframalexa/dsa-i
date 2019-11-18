@@ -35,15 +35,13 @@ class SimpleList
 	string listName = listName;
 
     private:
-<<<<<<< HEAD
+
 	string listName;
 	SimpleList(string n)
 	{
 	    string listName = n;
 	}
 
-=======
->>>>>>> c7f4073e894a3bb21acb6cdaefa37c4dd20ede91
         struct Node
         { 
 	    Node* next;

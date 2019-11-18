@@ -27,14 +27,14 @@ template <typename T>
 class SimpleList
 {
     public:
+	SimpleList(string ListName);
         virtual void push(T value)=0;
         virtual T pop()=0;
         string getListName();
         bool isEmpty() const;
+	string listName = listName;
 
     private:
-	SimpleList(string ListName);
-
         struct Node
         { 
 	    Node* next;
@@ -48,7 +48,6 @@ class SimpleList
 
 	Node *start = NULL;
         Node *end = NULL;
-	string listName = listName;
 
     protected:
         void insertAtStart(T val);

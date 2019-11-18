@@ -167,18 +167,18 @@ void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T val)
 {
     if (command[0] == "create")
     {
-        if (NameExists(listOfLists,command[1]))
+        if (ListSearch(listOfLists,command[1]) == NULL)
         {
             outfile << "ERROR: This name already exists!\n";
         }
 
-        else if (command[2] == "queue\0") //input was null terminated
+        else if (command[2] == "queue") //input was null terminated
         {
             Queue<T>* ptr = new Queue<T>(command[1]);
             listOfLists.push_front(ptr);
         }
 
-        else if (command[2] = "stack\0")
+        else if (command[2] == "stack")
         {
             Stack<T>* ptr = new Stack<T>(command[1]);
             listOfLists.push_back(ptr);
@@ -187,7 +187,7 @@ void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T val)
 
     if (command[0] == "push")
     {
-        if (NameExists(listOfLists, command[1]))
+        if (ListSearch(listOfLists, command[1]) == NULL)
         {
             outfile << "ERROR: This name does not exist!\n";
         }
@@ -203,7 +203,7 @@ void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T val)
     {
 	SimpleList<T> *ptr = ListSearch(listOfLists, command[1]);
 
-        if (NameExists(listOfLists, command[1]))
+        if (ListSearch(listOfLists, command[1])==NULL)
         {
             outfile << "ERROR: This name does not exist!\n";
         }
@@ -268,36 +268,17 @@ void ReadAndFollowCommand(string line)
     }
 }
 
-
 template <typename T>
-bool NameExists(list<SimpleList<T> *> listOfLists, string listname)
+SimpleList<T>* ListSearch(list<SimpleList<T> *> listOfLists, string listname)
 {
     typename list<SimpleList<T> *>::iterator it;
 
     for (it = listOfLists.begin(); it != listOfLists.end(); it++)
     {
-	string name = (*it)->listName;
-	
+	string name = (*it)->getListName();
 	if (name == listname)
 	{
-	    return true;
-	}
-    }
-
-    return false;
-}
-
-template <typename T>
-string ListSearch(list<SimpleList<T> *> listOfLists, string listname)
-{
-    typename list<SimpleList<T> *>::iterator it;
-
-    for (it = listOfLists.begin(); it != listOfLists.end(); it++)
-    {
-	string name = (*it)->listname;
-	if (name == listname)
-	{
-	    return listname;
+	    return *it;
 	}
     }
     return NULL;

@@ -33,12 +33,16 @@ class SimpleList
         bool isEmpty() const;
 
     private:
-	SimpleList(string ListName);
+	string listName;
+	SimpleList(string n)
+	{
+	    string listName = n;
+	}
 
         struct Node
         { 
 	    Node* next;
-
+	    T entry;
 	    Node(T val, Node* pointer)
 	    {
 		T entry = val;
@@ -48,7 +52,6 @@ class SimpleList
 
 	Node *start = NULL;
         Node *end = NULL;
-	string listName = listName;
 
     protected:
         void insertAtStart(T val);
@@ -56,6 +59,31 @@ class SimpleList
         T removeFromStart();
 };
 
+template <typename T>
+void SimpleList<T>::insertAtStart(T data)
+{
+    Node *newNode = new Node(data, start);
+    start = newNode;
+}
+
+template<typename T>
+void SimpleList<T>::insertAtEnd(T data)
+{
+    Node *newNode = new Node(data, NULL); // no node after it
+    end = newNode;
+}
+
+template <typename T>
+T SimpleList<T>::removeFromStart()
+{
+
+    Node *pointer = start;
+    T data = pointer->entry;
+    start = pointer->next;
+    delete pointer;
+    pointer = NULL;
+    return data;
+}
 
 
 list<SimpleList<double> *> listSLd;  // all double stacks and queues
@@ -90,7 +118,9 @@ class Stack:public SimpleList<T>
     public:
         void push(T data);
         T pop();
-	Stack(string StackName);
+	Stack(string n)
+	{
+	}
 };
 
 
@@ -105,7 +135,7 @@ void Stack<T>::push(T val)
 template <typename T>
 T Stack<T>::pop()
 {
-    Stack<T>::removeFromStart();
+    return Stack<T>::removeFromStart();
 }
 
 
@@ -116,7 +146,9 @@ class Queue:public SimpleList<T>
     public:
         void push(T value);
         T pop();
-	Queue(string QueueName);
+	Queue(string QueueName)
+	{
+	}
 };
 
 
@@ -131,33 +163,7 @@ void Queue<T>::push(T val)
 template <typename T>
 T Queue<T>::pop()
 {
-    Queue<T>::removeFromStart();
-}
-
-template <typename T>
-void SimpleList<T>::insertAtStart(T data)
-{
-    Node *newNode = new Node(data, start);
-    start = newNode;
-}
-
-template<typename T>
-void SimpleList<T>::insertAtEnd(T data)
-{
-    Node *newNode = new Node(data, NULL); // no node after it
-    end = newNode;
-}
-
-template <typename T>
-T SimpleList<T>::removeFromStart()
-{
-
-    Node *pointer = start;
-    T data = pointer->entry;
-    start = pointer->next;
-    delete pointer;
-    pointer = NULL;
-    return data;
+    return Queue<T>::removeFromStart();
 }
 
 

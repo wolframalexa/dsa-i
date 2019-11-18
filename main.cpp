@@ -27,18 +27,23 @@ template <typename T>
 class SimpleList
 {
     public:
+	SimpleList(string ListName);
         virtual void push(T value)=0;
         virtual T pop()=0;
         string getListName();
         bool isEmpty() const;
+	string listName = listName;
 
     private:
+<<<<<<< HEAD
 	string listName;
 	SimpleList(string n)
 	{
 	    string listName = n;
 	}
 
+=======
+>>>>>>> c7f4073e894a3bb21acb6cdaefa37c4dd20ede91
         struct Node
         { 
 	    Node* next;

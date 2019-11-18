@@ -65,7 +65,7 @@ list<SimpleList<string> *> listSLs; // all string stacks and queues
 
 // prompts user for file and opens it for reading
 
-void OpenInputFile(ifstream FileIn)
+void OpenInputFile(ifstream &FileIn) // need to pass address of FileIn bc ifstream is an address
 {
     string FileNameIn;
     cout << "Enter name of input file: ";
@@ -74,7 +74,7 @@ void OpenInputFile(ifstream FileIn)
 }
 
 // prompts user for output file and opens it for writing
-void OpenOutputFile(ofstream FileOut)
+void OpenOutputFile(ofstream &FileOut)
 {
     string FileNameOut;
     cout << "Enter name of output file: ";
@@ -85,11 +85,12 @@ void OpenOutputFile(ofstream FileOut)
 
 // creates Stack derived class
 template <typename T>
-class Stack:SimpleList<T>
+class Stack:public SimpleList<T>
 {
     public:
         void push(T data);
         T pop();
+	Stack(string StackName);
 };
 
 
@@ -97,7 +98,7 @@ class Stack:SimpleList<T>
 template <typename T>
 void Stack<T>::push(T val)
 {
-    Stack<T>::insertAtStart(T val);
+    Stack<T>::insertAtStart(val);
 }
 
 // allows user to pop from stacks
@@ -110,11 +111,12 @@ T Stack<T>::pop()
 
 // creates Queue derived class
 template <typename T>
-class Queue:SimpleList<T>
+class Queue:public SimpleList<T>
 {
     public:
         void push(T value);
         T pop();
+	Queue(string QueueName);
 };
 
 
@@ -122,7 +124,7 @@ class Queue:SimpleList<T>
 template <typename T>
 void Queue<T>::push(T val)
 {
-    Queue<T>::insertAtEnd(T val);
+    Queue<T>::insertAtEnd(val);
 }
 
 // allows user to pop from queues
@@ -130,6 +132,32 @@ template <typename T>
 T Queue<T>::pop()
 {
     Queue<T>::removeFromStart();
+}
+
+template <typename T>
+void SimpleList<T>::insertAtStart(T data)
+{
+    Node *newNode = new Node(data, start);
+    start = newNode;
+}
+
+template<typename T>
+void SimpleList<T>::insertAtEnd(T data)
+{
+    Node *newNode = new Node(data, NULL); // no node after it
+    end = newNode;
+}
+
+template <typename T>
+T SimpleList<T>::removeFromStart()
+{
+
+    Node *pointer = start;
+    T data = pointer->entry;
+    start = pointer->next;
+    delete pointer;
+    pointer = NULL;
+    return data;
 }
 
 
@@ -147,13 +175,13 @@ void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T val)
         else if (command[2] == "queue\0") //input was null terminated
         {
             Queue<T>* ptr = new Queue<T>(command[1]);
-            listOfLists.insertAtStart(ptr);
+            listOfLists.push_front(ptr);
         }
 
         else if (command[2] = "stack\0")
         {
             Stack<T>* ptr = new Stack<T>(command[1]);
-            listOfLists.insertAtStart(ptr);
+            listOfLists.push_back(ptr);
         }
     }
 
@@ -248,7 +276,7 @@ bool NameExists(list<SimpleList<T> *> listOfLists, string listname)
 
     for (it = listOfLists.begin(); it != listOfLists.end(); it++)
     {
-	string name = (*it)->name;
+	string name = (*it)->listName;
 	
 	if (name == listname)
 	{
@@ -266,7 +294,7 @@ string ListSearch(list<SimpleList<T> *> listOfLists, string listname)
 
     for (it = listOfLists.begin(); it != listOfLists.end(); it++)
     {
-	string name = (*it)->name;
+	string name = (*it)->listname;
 	if (name == listname)
 	{
 	    return listname;
@@ -297,43 +325,6 @@ bool SimpleList<T>::isEmpty() const
     }
 }
 
-
-template <typename T>
-void SimpleList<T>::insertAtStart(T data)
-{
-    Node *newNode = new Node(data, start);
-    start = newNode;
-}
-
-template<typename T>
-void SimpleList<T>::insertAtEnd(T data)
-{
-    Node *newNode = new Node(data, NULL); // no node after it
-    end = newNode;
-}
-
-template <typename T>
-T SimpleList<T>::removeFromStart()
-{
-
-    Node *pointer = start;
-    T data = pointer->entry;    
-    start = pointer->next;
-    delete pointer;
-    pointer = NULL;
-    return data;
-}
-
-
-// allows user to push to stacks
-template <typename T>
-void Stack<T>::push(T data)
-{
-    Stack<T>::insertAtStart(T data);
-}
-
-
-
 int main()
 {
     OpenInputFile(infile);
@@ -342,7 +333,7 @@ int main()
     string inLine;
     while (getline(infile, inLine))
     {
-        ReadCommand(inLine);
+        ReadAndFollowCommand(inLine);
     }
 
     return 0;

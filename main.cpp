@@ -27,21 +27,17 @@ template <typename T>
 class SimpleList
 {
     public:
-	SimpleList(string ListName);
         virtual void push(T value)=0;
         virtual T pop()=0;
         string getListName();
         bool isEmpty() const;
-	string listName = listName;
-
-    private:
-
 	string listName;
 	SimpleList(string n)
 	{
 	    string listName = n;
 	}
 
+    private:
         struct Node
         { 
 	    Node* next;
@@ -95,7 +91,6 @@ list<SimpleList<string> *> listSLs; // all string stacks and queues
 
 
 // prompts user for file and opens it for reading
-
 void OpenInputFile(ifstream &FileIn) // need to pass address of FileIn bc ifstream is an address
 {
     string FileNameIn;
@@ -119,9 +114,9 @@ template <typename T>
 class Stack:public SimpleList<T>
 {
     public:
-        void push(T data);
+        void push(T val);
         T pop();
-	Stack(string n)
+	Stack(string n):SimpleList<T>(n)
 	{
 	}
 };
@@ -144,12 +139,12 @@ T Stack<T>::pop()
 
 // creates Queue derived class
 template <typename T>
-class Queue:public SimpleList<T>
+class Queue: public SimpleList<T>
 {
     public:
-        void push(T value);
+        void push(T val);
         T pop();
-	Queue(string QueueName)
+	Queue(string n): SimpleList<T>(n)
 	{
 	}
 };

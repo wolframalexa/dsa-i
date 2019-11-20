@@ -35,7 +35,7 @@ class SimpleList
 
 	SimpleList(string n)
 	{
-	    string listName = n;
+	    listName = n;
 	    start = NULL;
 	    end = NULL;
 	}
@@ -74,6 +74,15 @@ template<typename T>
 void SimpleList<T>::insertAtEnd(T data)
 {
     Node *newNode = new Node(data, NULL); // no node after it
+    
+    if (end == NULL)
+    {
+	start = newNode;
+    }
+    else
+    {
+	(end->next) = newNode;
+    }
     end = newNode;
 }
 
@@ -174,8 +183,6 @@ T Queue<T>::pop()
 template <typename T>
 void FollowCommand(list<SimpleList<T> *> &listOfLists, string command[], T val)
 {
-    cout << "checkpoint 6 (FollowCommand called)" << endl;
-
     if (command[0] == "create")
     {
 	if (ListSearch(listOfLists, command[1]) != NULL)
@@ -185,18 +192,14 @@ void FollowCommand(list<SimpleList<T> *> &listOfLists, string command[], T val)
 
 	else
 	{
-	    outfile << "List has not been used\n";
-
 	    if (command[2] == "queue\0")
             {
         	Queue<T>* ptr = new Queue<T>(command[1]);
 		listOfLists.push_front(ptr);
-		outfile << "Size of new list: " << listOfLists.size() << "\n";
-            }
+	    }
 
             else if (command[2] == "stack\0")
             {
-		outfile << "Stack created\n";
         	Stack<T>* ptr = new Stack<T>(command[1]);
         	listOfLists.push_front(ptr);
             }
@@ -209,7 +212,7 @@ void FollowCommand(list<SimpleList<T> *> &listOfLists, string command[], T val)
 
 	if (ptr == NULL)
         {
-            outfile << "ERROR: This name does not exist! (push) \n";
+            outfile << "ERROR: This name does not exist!\n";
         }
 
         else
@@ -224,7 +227,7 @@ void FollowCommand(list<SimpleList<T> *> &listOfLists, string command[], T val)
 
         if (ptr == NULL)
         {
-            outfile << "ERROR: This name does not exist! (pop) \n";
+            outfile << "ERROR: This name does not exist!\n";
         }
 
         else if (ptr->isEmpty())
@@ -234,7 +237,7 @@ void FollowCommand(list<SimpleList<T> *> &listOfLists, string command[], T val)
 
         else
         {
-	    outfile << "Value popped: " << ptr->pop();
+	    outfile << "Value popped: " << ptr->pop() << "\n";
         }
     }
 }
@@ -246,21 +249,16 @@ void FollowCommand(list<SimpleList<T> *> &listOfLists, string command[], T val)
 
 void ReadAndFollowCommand(string line)
 {
-    cout << "checkpoint 4" << endl;
-
     outfile << "PROCESSING COMMAND: " << line << "\n";
-    istringstream linestream(line);
+    stringstream linestream(line);
     string word;
-    string command[2];
+    string* command = new string[3];
     
     int i = 0;
     while (linestream >> word)
     {
-	cout << word << endl;
 	command[i++] = word;
     }
-
-    cout << "commands split up" << endl;
 
     // Follow command based on datatype
     
@@ -293,25 +291,18 @@ void ReadAndFollowCommand(string line)
 	string val = command[2];
 	FollowCommand(listSLs, command, val);
     }
-
-    cout << "checkpoint 5" << endl;
 }
 
 template <typename T>
 SimpleList<T>* ListSearch(list<SimpleList<T> *> &listOfLists, string listname)
 {
-    outfile << "size of list " << listOfLists.size() << "\n";
     for (typename list<SimpleList<T> *>::const_iterator it = listOfLists.begin(); it != listOfLists.end(); ++it)
     {
-	outfile << "we're in the for loop now kids\n";
 	if ((*it)->getListName() == listname)
 	{
 	    return *it;
-	    outfile << "returning a list\n";
 	}
     }
-    
-    outfile << "out of the for loop\n";
     return NULL;
 }
 
@@ -330,7 +321,6 @@ bool SimpleList<T>::isEmpty() const
     if (start == NULL)
     {
 	return true;
-	outfile << "isEmpty() was called and returned true!\n";
     }
     else
     {
@@ -340,22 +330,13 @@ bool SimpleList<T>::isEmpty() const
 
 int main()
 {
-    cout << "checkpoint 1" << endl;
-
     OpenInputFile(infile);
     OpenOutputFile(outfile);
-
-    cout << "checkpoint2" << endl;
 
     string inLine;
     while (getline(infile, inLine))
     {
-	cout << "checkpoint3" << endl;
-
         ReadAndFollowCommand(inLine);
-	cout << "Double list size: " << listSLd.size() << "\n";
-	cout << "Integer list size: " << listSLi.size() << "\n";
-	cout << "String list size: " << listSLs.size() << "\n";
     }
 
     return 0;

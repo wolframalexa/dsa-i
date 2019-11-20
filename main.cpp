@@ -32,25 +32,30 @@ class SimpleList
         string getListName();
         bool isEmpty() const;
 	string listName;
+
 	SimpleList(string n)
 	{
 	    string listName = n;
+	    start = NULL;
+	    end = NULL;
 	}
 
     private:
         struct Node
-        { 
-	    Node* next;
+        {
 	    T entry;
+	    Node* next;
+
 	    Node(T val, Node* pointer)
 	    {
-		T entry = val;
+		entry = val;
 		next = pointer;
 	    }
         };
 
-	Node *start = NULL;
-        Node *end = NULL;
+	Node* start;
+	Node* end;
+
 
     protected:
         void insertAtStart(T val);
@@ -167,8 +172,10 @@ T Queue<T>::pop()
 
 // using the output from the ReadCommand function, follow the appropriate comma                        >
 template <typename T>
-void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T val)
+void FollowCommand(list<SimpleList<T> *> &listOfLists, string command[], T val)
 {
+    cout << "checkpoint 6 (FollowCommand called)" << endl;
+
     if (command[0] == "create")
     {
 	if (ListSearch(listOfLists, command[1]) != NULL)
@@ -180,7 +187,7 @@ void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T val)
 	{
 	    outfile << "List has not been used\n";
 
-	    if (command[2] == "queue\0") //input was null terminated
+	    if (command[2] == "queue\0")
             {
         	Queue<T>* ptr = new Queue<T>(command[1]);
 		listOfLists.push_front(ptr);
@@ -198,14 +205,15 @@ void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T val)
 
     else if (command[0] == "push")
     {
-	if (ListSearch(listOfLists, command[1]) == NULL)
+	SimpleList<T> *ptr = ListSearch(listOfLists, command[1]);	
+
+	if (ptr == NULL)
         {
             outfile << "ERROR: This name does not exist! (push) \n";
         }
 
         else
         {
-            SimpleList<T> *ptr = ListSearch(listOfLists, command[1]); // push this to the appropriate stack/queue 
 	    ptr->push(val);
         }
     }
@@ -238,6 +246,8 @@ void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T val)
 
 void ReadAndFollowCommand(string line)
 {
+    cout << "checkpoint 4" << endl;
+
     outfile << "PROCESSING COMMAND: " << line << "\n";
     istringstream linestream(line);
     string word;
@@ -246,8 +256,11 @@ void ReadAndFollowCommand(string line)
     int i = 0;
     while (linestream >> word)
     {
+	cout << word << endl;
 	command[i++] = word;
     }
+
+    cout << "commands split up" << endl;
 
     // Follow command based on datatype
     
@@ -257,8 +270,9 @@ void ReadAndFollowCommand(string line)
 	if (!command[2].empty())
 	{
 	    val = atoi(command[2].c_str()); //atoi only works on C-style strings
-	    FollowCommand(listSLi, command, val);
 	}
+    
+        FollowCommand(listSLi, command, val);
     }
 
     else if (command[1].substr(0,1) == "d")
@@ -268,8 +282,9 @@ void ReadAndFollowCommand(string line)
 	{
 	    
 	    val = atof(command[2].c_str());
-	    FollowCommand(listSLd, command, val); // ISSUE HERE
 	}
+    
+	FollowCommand(listSLd, command, val); // ISSUE HERE
     }
 
 
@@ -278,6 +293,8 @@ void ReadAndFollowCommand(string line)
 	string val = command[2];
 	FollowCommand(listSLs, command, val);
     }
+
+    cout << "checkpoint 5" << endl;
 }
 
 template <typename T>
@@ -313,6 +330,7 @@ bool SimpleList<T>::isEmpty() const
     if (start == NULL)
     {
 	return true;
+	outfile << "isEmpty() was called and returned true!\n";
     }
     else
     {
@@ -322,17 +340,22 @@ bool SimpleList<T>::isEmpty() const
 
 int main()
 {
+    cout << "checkpoint 1" << endl;
+
     OpenInputFile(infile);
     OpenOutputFile(outfile);
+
+    cout << "checkpoint2" << endl;
 
     string inLine;
     while (getline(infile, inLine))
     {
+	cout << "checkpoint3" << endl;
+
         ReadAndFollowCommand(inLine);
-	// outfile << "Double list size: " << listSLd.size() << "\n";
-	// outfile << "Integer list size: " << listSLi.size() << "\n";
-	// outfile << "String list size: " << listSLs.size() << "\n";
-	
+	cout << "Double list size: " << listSLd.size() << "\n";
+	cout << "Integer list size: " << listSLi.size() << "\n";
+	cout << "String list size: " << listSLs.size() << "\n";
     }
 
     return 0;

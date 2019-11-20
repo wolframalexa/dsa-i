@@ -171,29 +171,36 @@ void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T val)
 {
     if (command[0] == "create")
     {
-        if (ListSearch(listOfLists,command[1]) == NULL)
+	if (ListSearch(listOfLists, command[1]) != NULL)
         {
-            outfile << "ERROR: This name already exists!\n";
-        }
+	    outfile << "ERROR: This name already exists!\n";
+	}
 
-        else if (command[2] == "queue") //input was null terminated
-        {
-            Queue<T>* ptr = new Queue<T>(command[1]);
-            listOfLists.push_front(ptr);
-        }
+	else
+	{
+	    outfile << "List has not been used\n";
 
-        else if (command[2] == "stack")
-        {
-            Stack<T>* ptr = new Stack<T>(command[1]);
-            listOfLists.push_back(ptr);
-        }
+	    if (command[2] == "queue\0") //input was null terminated
+            {
+        	Queue<T>* ptr = new Queue<T>(command[1]);
+		listOfLists.push_front(ptr);
+		outfile << "Size of new list: " << listOfLists.size() << "\n";
+            }
+
+            else if (command[2] == "stack\0")
+            {
+		outfile << "Stack created\n";
+        	Stack<T>* ptr = new Stack<T>(command[1]);
+        	listOfLists.push_front(ptr);
+            }
+	}
     }
 
-    if (command[0] == "push")
+    else if (command[0] == "push")
     {
-        if (ListSearch(listOfLists, command[1]) == NULL)
+	if (ListSearch(listOfLists, command[1]) == NULL)
         {
-            outfile << "ERROR: This name does not exist!\n";
+            outfile << "ERROR: This name does not exist! (push) \n";
         }
 
         else
@@ -203,13 +210,13 @@ void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T val)
         }
     }
 
-    if (command[0] == "pop")
+    else if (command[0] == "pop")
     {
 	SimpleList<T> *ptr = ListSearch(listOfLists, command[1]);
 
-        if (ListSearch(listOfLists, command[1])==NULL)
+        if (ptr == NULL)
         {
-            outfile << "ERROR: This name does not exist!\n";
+            outfile << "ERROR: This name does not exist! (pop) \n";
         }
 
         else if (ptr->isEmpty())
@@ -219,8 +226,7 @@ void FollowCommand(list<SimpleList<T> *> listOfLists, string command[], T val)
 
         else
         {
-	    SimpleList<T> *ptr = ListSearch(listOfLists, command[1]);
-	    ptr->pop();
+	    outfile << "Value popped: " << ptr->pop();
         }
     }
 }
@@ -247,44 +253,48 @@ void ReadAndFollowCommand(string line)
     
     if (command[1].substr(0,1) == "i")
     {
-	int data = 0;
-	if (command[2].empty())
+	int val = 0;
+	if (!command[2].empty())
 	{
-	    data = atoi(command[2].c_str()); //atoi only works on C-style strings
-	    FollowCommand(listSLi, command, data);
+	    val = atoi(command[2].c_str()); //atoi only works on C-style strings
+	    FollowCommand(listSLi, command, val);
 	}
     }
 
     else if (command[1].substr(0,1) == "d")
     {
-	double data = 0;
-	if (command[2].empty())
+	double val = 0.0;
+	if (!command[2].empty())
 	{
-	    data = atof(command[2].c_str());
-	    FollowCommand(listSLd, command, data);
+	    
+	    val = atof(command[2].c_str());
+	    FollowCommand(listSLd, command, val); // ISSUE HERE
 	}
     }
 
+
     else if (command[1].substr(0,1) == "s")
     {
-	string data = command[2];
-	FollowCommand(listSLs, command, data);
+	string val = command[2];
+	FollowCommand(listSLs, command, val);
     }
 }
 
 template <typename T>
-SimpleList<T>* ListSearch(list<SimpleList<T> *> listOfLists, string listname)
+SimpleList<T>* ListSearch(list<SimpleList<T> *> &listOfLists, string listname)
 {
-    typename list<SimpleList<T> *>::iterator it;
-
-    for (it = listOfLists.begin(); it != listOfLists.end(); it++)
+    outfile << "size of list " << listOfLists.size() << "\n";
+    for (typename list<SimpleList<T> *>::const_iterator it = listOfLists.begin(); it != listOfLists.end(); ++it)
     {
-	string name = (*it)->getListName();
-	if (name == listname)
+	outfile << "we're in the for loop now kids\n";
+	if ((*it)->getListName() == listname)
 	{
 	    return *it;
+	    outfile << "returning a list\n";
 	}
     }
+    
+    outfile << "out of the for loop\n";
     return NULL;
 }
 
@@ -319,6 +329,10 @@ int main()
     while (getline(infile, inLine))
     {
         ReadAndFollowCommand(inLine);
+	// outfile << "Double list size: " << listSLd.size() << "\n";
+	// outfile << "Integer list size: " << listSLi.size() << "\n";
+	// outfile << "String list size: " << listSLs.size() << "\n";
+	
     }
 
     return 0;

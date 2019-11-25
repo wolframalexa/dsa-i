@@ -14,6 +14,11 @@ using namespace std;
     from stacks and queues, and writes to an output file.
 */
 
+// write to output and read from input file
+
+ifstream infile;
+ofstream outfile;
+
 // Creates a class that sets up a singly linked list from which the stacks and queues are derived
 
 template <typename T>
@@ -33,7 +38,7 @@ class SimpleList
 	    end = NULL;
 	}
 
-    private:
+    // private:
 	// subclass allows us to create nodes within the list
         struct Node
         {
@@ -55,6 +60,11 @@ class SimpleList
         void insertAtEnd(T val);
         T removeFromStart();
 };
+
+list<SimpleList<double> *> listSLd;  // all double stacks and queues
+list<SimpleList<int> *> listSLi;    // all integer stacks and queues
+list<SimpleList<string> *> listSLs; // all string stacks and queues
+
 
 // Getter function for the list name
 template <typename T>
@@ -113,9 +123,14 @@ T SimpleList<T>::removeFromStart()
 {
     Node *pointer = start;
     T data = pointer->entry;
+    
+    if (pointer->next == NULL)
+    {
+	end = NULL;
+    }
+
     start = pointer->next;
     delete pointer;
-    pointer = NULL;
     return data;
 }
 
@@ -239,7 +254,18 @@ void FollowCommand(list<SimpleList<T> *> &listOfLists, string command[], T val)
         else
         {
 	    outfile << "Value popped: " << ptr->pop() << "\n";
-        }
+	}
+
+// REMOVE THIS WHILE SUBMITTING IT'S THE PROBLEM
+/*
+
+	typename SimpleList<T>::Node currentNode = *(ptr->start);
+	while (currentNode.entry != (*(ptr->end)).entry)
+	{
+	    outfile << currentNode.entry << "\n";
+	    currentNode = *(currentNode.next);
+	}
+*/
     }
 }
 
@@ -325,12 +351,6 @@ void OpenOutputFile(ofstream &FileOut)
     FileOut.open(FileNameOut.c_str());
 }
 
-
-ifstream infile;
-ofstream outfile;
-list<SimpleList<double> *> listSLd;  // all double stacks and queues
-list<SimpleList<int> *> listSLi;    // all integer stacks and queues
-list<SimpleList<string> *> listSLs; // all string stacks and queues
 
 int main()
 {

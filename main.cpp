@@ -6,8 +6,6 @@
 #include <stdlib.h> // use atoi, atof
 #include <sstream>  // use stringstream
 
-
-
 using namespace std;
 
 /*  Alexa Jakob
@@ -15,10 +13,6 @@ using namespace std;
     This program implements instructions from an input file to create, push to, and pop 
     from stacks and queues, and writes to an output file.
 */
-
-ifstream infile;
-ofstream outfile;
-
 
 // Creates a class that sets up a singly linked list from which the stacks and queues are derived
 
@@ -31,9 +25,7 @@ class SimpleList
         string getListName();
         bool isEmpty() const;
 	string listName;
-
 	// SimpleList constructor
-
 	SimpleList(string n)
 	{
 	    listName = n;
@@ -42,9 +34,7 @@ class SimpleList
 	}
 
     private:
-
 	// subclass allows us to create nodes within the list
-
         struct Node
         {
 	    T entry;
@@ -60,16 +50,35 @@ class SimpleList
 	Node* start;
 	Node* end;
 
-
     protected:
         void insertAtStart(T val);
         void insertAtEnd(T val);
         T removeFromStart();
 };
 
+// Getter function for the list name
+template <typename T>
+string SimpleList<T>::getListName()
+{
+    return listName;
+}
+
+
+// Checks if the list is empty
+template <typename T>
+bool SimpleList<T>::isEmpty() const
+{
+    if (start == NULL)
+    {
+	return true;
+    }
+    else
+    {
+	return false;
+    }
+}
 
 // Insert nodes at the start of the list. This is the basis for pushing to stacks.
-
 template <typename T>
 void SimpleList<T>::insertAtStart(T data)
 {
@@ -77,17 +86,14 @@ void SimpleList<T>::insertAtStart(T data)
     start = newNode;
 }
 
-
 // Insert nodes at the end of the list. This is the basis for pushing to queues.
-
 template<typename T>
 void SimpleList<T>::insertAtEnd(T data)
 {
     Node *newNode = new Node(data, NULL); // no node after it
     
-    // for an empty list, the "start" node should become a new node.
-    // Otherwise, the current end should point to the new node, and reassign end to the new node.
-
+    /* for an empty list, the "start" node should become a new node. 
+    Otherwise, the current end should point to the new node, and reassign end to the new node. */
     if (end == NULL)
     {
 	start = newNode;
@@ -102,11 +108,9 @@ void SimpleList<T>::insertAtEnd(T data)
 
 /* Remove nodes from the beginning of the list. This is the basis for popping,
 and is implemented at the start instead of the end to avoid linear time of walking through the list. */
-
 template <typename T>
 T SimpleList<T>::removeFromStart()
 {
-
     Node *pointer = start;
     T data = pointer->entry;
     start = pointer->next;
@@ -116,51 +120,29 @@ T SimpleList<T>::removeFromStart()
 }
 
 
-list<SimpleList<double> *> listSLd;  // all double stacks and queues
-list<SimpleList<int> *> listSLi;    // all integer stacks and queues
-list<SimpleList<string> *> listSLs; // all string stacks and queues
-
-
-// prompts user for file and opens it for reading
-void OpenInputFile(ifstream &FileIn) // need to pass address of FileIn bc ifstream is an address
-{
-    string FileNameIn;
-    cout << "Enter name of input file: ";
-    cin >> FileNameIn;
-    FileIn.open(FileNameIn.c_str());
-}
-
-// prompts user for output file and opens it for writing
-void OpenOutputFile(ofstream &FileOut)
-{
-    string FileNameOut;
-    cout << "Enter name of output file: ";
-    cin >> FileNameOut;
-    FileOut.open(FileNameOut.c_str());
-}
-
-
-// creates Stack derived class
+// Creates Stack derived class
 template <typename T>
 class Stack:public SimpleList<T>
 {
     public:
         void push(T val);
         T pop();
+
+	// Constructor for Stack
 	Stack(string n):SimpleList<T>(n)
 	{
 	}
 };
 
 
-// allows user to push to stacks
+// Push to stacks
 template <typename T>
 void Stack<T>::push(T val)
 {
     Stack<T>::insertAtStart(val);
 }
 
-// allows user to pop from stacks
+// Pop from stacks
 template <typename T>
 T Stack<T>::pop()
 {
@@ -168,27 +150,29 @@ T Stack<T>::pop()
 }
 
 
-// creates Queue derived class
+// Creates Queue derived class
 template <typename T>
-class Queue: public SimpleList<T>
+class Queue:public SimpleList<T>
 {
     public:
         void push(T val);
         T pop();
+	
+	// Constructor for Queue
 	Queue(string n): SimpleList<T>(n)
 	{
 	}
 };
 
 
-// allows user to push to queues
+// Push to queues
 template <typename T>
 void Queue<T>::push(T val)
 {
     Queue<T>::insertAtEnd(val);
 }
 
-// allows user to pop from queues
+// Pop from queues
 template <typename T>
 T Queue<T>::pop()
 {
@@ -196,7 +180,7 @@ T Queue<T>::pop()
 }
 
 
-// using the output from the ReadCommand function, follow the appropriate comma                        >
+// Using the output from the ReadCommand function below, follow the appropriate comma                        >
 template <typename T>
 void FollowCommand(list<SimpleList<T> *> &listOfLists, string command[], T val)
 {
@@ -209,7 +193,7 @@ void FollowCommand(list<SimpleList<T> *> &listOfLists, string command[], T val)
 
 	else
 	{
-	    if (command[2] == "queue\0")
+	    if (command[2] == "queue\0") // inputs were null-terminated, so compare to a null-terminated string
             {
         	Queue<T>* ptr = new Queue<T>(command[1]);
 		listOfLists.push_front(ptr);
@@ -259,10 +243,8 @@ void FollowCommand(list<SimpleList<T> *> &listOfLists, string command[], T val)
     }
 }
 
-
-
-// processes line in file and splits it into three words. If the command is
-// pop, command[2] should be empty
+/* processes line in file and splits it into three words. 
+If the command is pop, command[2] should be empty */
 
 void ReadAndFollowCommand(string line)
 {
@@ -271,6 +253,7 @@ void ReadAndFollowCommand(string line)
     string word;
     string* command = new string[3];
     
+    // split line into three parts: command, name, and value
     int i = 0;
     while (linestream >> word)
     {
@@ -278,7 +261,6 @@ void ReadAndFollowCommand(string line)
     }
 
     // Follow command based on datatype
-    
     if (command[1].substr(0,1) == "i")
     {
 	int val = 0;
@@ -298,8 +280,7 @@ void ReadAndFollowCommand(string line)
 	    
 	    val = atof(command[2].c_str());
 	}
-    
-	FollowCommand(listSLd, command, val); // ISSUE HERE
+	FollowCommand(listSLd, command, val);
     }
 
 
@@ -310,6 +291,8 @@ void ReadAndFollowCommand(string line)
     }
 }
 
+/* Search for a list in the list containing pointers to all stacks and queues of one datatype.
+Used for checking that a list exists (or doesn't) and popping/pushing to the right list */
 template <typename T>
 SimpleList<T>* ListSearch(list<SimpleList<T> *> &listOfLists, string listname)
 {
@@ -323,27 +306,31 @@ SimpleList<T>* ListSearch(list<SimpleList<T> *> &listOfLists, string listname)
     return NULL;
 }
 
-// getter function for the list name
-template <typename T>
-string SimpleList<T>::getListName()
+
+// Prompts user for file and opens it for reading
+void OpenInputFile(ifstream &FileIn) // need to pass address of FileIn bc ifstream is an address
 {
-    return listName;
+    string FileNameIn;
+    cout << "Enter name of input file: ";
+    cin >> FileNameIn;
+    FileIn.open(FileNameIn.c_str());
+}
+
+// Prompts user for output file and opens it for writing
+void OpenOutputFile(ofstream &FileOut)
+{
+    string FileNameOut;
+    cout << "Enter name of output file: ";
+    cin >> FileNameOut;
+    FileOut.open(FileNameOut.c_str());
 }
 
 
-// checks if the list is empty
-template <typename T>
-bool SimpleList<T>::isEmpty() const
-{
-    if (start == NULL)
-    {
-	return true;
-    }
-    else
-    {
-	return false;
-    }
-}
+ifstream infile;
+ofstream outfile;
+list<SimpleList<double> *> listSLd;  // all double stacks and queues
+list<SimpleList<int> *> listSLi;    // all integer stacks and queues
+list<SimpleList<string> *> listSLs; // all string stacks and queues
 
 int main()
 {

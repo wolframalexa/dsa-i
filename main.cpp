@@ -20,8 +20,7 @@ ifstream infile;
 ofstream outfile;
 
 
-// creates a class that sets up a singly linked list from which the stacks
-// and queues are derived
+// Creates a class that sets up a singly linked list from which the stacks and queues are derived
 
 template <typename T>
 class SimpleList
@@ -33,6 +32,8 @@ class SimpleList
         bool isEmpty() const;
 	string listName;
 
+	// SimpleList constructor
+
 	SimpleList(string n)
 	{
 	    listName = n;
@@ -41,6 +42,9 @@ class SimpleList
 	}
 
     private:
+
+	// subclass allows us to create nodes within the list
+
         struct Node
         {
 	    T entry;
@@ -63,6 +67,9 @@ class SimpleList
         T removeFromStart();
 };
 
+
+// Insert nodes at the start of the list. This is the basis for pushing to stacks.
+
 template <typename T>
 void SimpleList<T>::insertAtStart(T data)
 {
@@ -70,11 +77,17 @@ void SimpleList<T>::insertAtStart(T data)
     start = newNode;
 }
 
+
+// Insert nodes at the end of the list. This is the basis for pushing to queues.
+
 template<typename T>
 void SimpleList<T>::insertAtEnd(T data)
 {
     Node *newNode = new Node(data, NULL); // no node after it
     
+    // for an empty list, the "start" node should become a new node.
+    // Otherwise, the current end should point to the new node, and reassign end to the new node.
+
     if (end == NULL)
     {
 	start = newNode;
@@ -85,6 +98,10 @@ void SimpleList<T>::insertAtEnd(T data)
     }
     end = newNode;
 }
+
+
+/* Remove nodes from the beginning of the list. This is the basis for popping,
+and is implemented at the start instead of the end to avoid linear time of walking through the list. */
 
 template <typename T>
 T SimpleList<T>::removeFromStart()

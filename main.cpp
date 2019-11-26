@@ -38,7 +38,7 @@ class SimpleList
 	    end = NULL;
 	}
 
-    // private:
+    private:
 	// subclass allows us to create nodes within the list
         struct Node
         {
@@ -255,17 +255,6 @@ void FollowCommand(list<SimpleList<T> *> &listOfLists, string command[], T val)
         {
 	    outfile << "Value popped: " << ptr->pop() << "\n";
 	}
-
-// REMOVE THIS WHILE SUBMITTING IT'S THE PROBLEM
-/*
-
-	typename SimpleList<T>::Node currentNode = *(ptr->start);
-	while (currentNode.entry != (*(ptr->end)).entry)
-	{
-	    outfile << currentNode.entry << "\n";
-	    currentNode = *(currentNode.next);
-	}
-*/
     }
 }
 

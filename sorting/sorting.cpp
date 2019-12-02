@@ -115,7 +115,21 @@ int determineCase(list<Data *> &l);
 
 void sortDataList(list<Data *> &l) {
   // Fill this in
-  determineCase(l);
+  switch(determineCase(l))
+  {
+    case 1:
+      cout << "Case 1\n";
+      break;
+    case 2:
+      cout << "Case 2\n";
+      break;
+    case 3:
+      cout << "Case 3\n";
+      break;
+    case 4:
+      cout << "Case 4\n";
+      break;
+  }
 }
 
 // determine which list we're sorting, to use different strategies for each

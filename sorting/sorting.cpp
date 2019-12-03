@@ -111,7 +111,11 @@ int main() {
 // You may add global variables, functions, and/or
 // class defintions here if you wish.
 int determineCase(list<Data *> &l);
-
+string initializeArray(int size, string datamember, list<Data *> &l);
+void radixSort(list<Data *> &l);
+void mergeSort(list<Data *> &l);
+void quickSort(list<Data *> &l);
+string array[1100000]
 
 void sortDataList(list<Data *> &l) {
   // Fill this in
@@ -127,7 +131,7 @@ void sortDataList(list<Data *> &l) {
       cout << "Case 3\n";
       break;
     case 4:
-      cout << "Case 4\n";
+      cout << "Case 4\n" << l.size() << "\n";
       break;
   }
 }
@@ -168,4 +172,35 @@ int determineCase(list<Data *> &l)
   {
     return 2;
   }
+}
+
+void radixSort(list<Data *> &l)
+{
+
+}
+
+void mergeSort(list<Data *> &l)
+{
+
+}
+
+void quickSort(list<Data *> &l)
+{
+
+}
+
+string initializeArraySSN(int size, string datamember, list<Data *> &l)
+{
+  int i = 0;
+  for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
+  {
+    array[i] = (*it)->ssn;
+    i++;
+  }
+  return array;
+}
+
+string initializeArrayFN(int size, list<Data *> &l)
+{
+
 }

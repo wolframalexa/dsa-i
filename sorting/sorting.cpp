@@ -114,16 +114,13 @@ int main() {
 #include <array>
 
 int determineCase(list<Data *> &l);
-void initializeArraySSN(int size, list<Data *> &l);
+void initializeArraySSN(list<Data *> &l);
 void countingSort(list<Data *> &l);
-void mergeSort(list<Data *> &l);
-void quickSort(list<Data *> &l, int left, int right);
-bool compareMerge(Data *a, Data *b);
-void swap(T &a, T &b);
-int choosePivotIndex(array A, int left, int right);
-int Partition(array A, int left, int right);
-
-
+void quickSort(string A[], int left, int right);
+// bool compareMerge(Data *a, Data *b);
+void swap(string &a, string &b);
+int choosePivotIndex(string A, int left, int right);
+int Partition(string A, int left, int right);
 string SSNList[1100000] = {};
 
 
@@ -133,7 +130,6 @@ void sortDataList(list<Data *> &l) {
   {
     case 1:
       cout << "Case 1\n";
-      mergeSort(l);
       break;
     case 2:
       cout << "Case 2\n";
@@ -142,7 +138,10 @@ void sortDataList(list<Data *> &l) {
       cout << "Case 3\n";
       break;
     case 4:
-      cout << "Case 4\n" << l.size() << "\n";
+      cout << "Case 4\n";
+      initializeArraySSN(l);
+      quickSort(SSNList,0,sizeof(SSNList)); // SEGFAULT HERE
+      cout << sizeof(SSNList) << "\n";
       break;
   }
 }
@@ -184,41 +183,40 @@ int determineCase(list<Data *> &l)
   }
 }
 
-template <typename T>
-void swap(T &a, T &b)
+void swap(string &a, string &b)
 {
-  T c = a;
+  string c = a;
   a = b;
   b = c;
 }
 
-int choosePivotIndex(array A, int left, int right)
+int choosePivotIndex(string A[], int left, int right)
 {
   int m = (1+right)/2;
-  if A[left] > A[m]
+  if (A[left] > A[m])
   {
     swap(A[left],A[m]);
   }
-  if A[m] > A[right]
+  if (A[m] > A[right])
   {
-    swap(A[m],A[right])
+    swap(A[m],A[right]);
   }
-  if A[left] > A[m]
+  if (A[left] > A[m])
   {
-    swap(A[l],A[m])
+    swap(A[left],A[m]);
   }
   return m;
 }
 
 
-int Partition(array A, int left, int right)
+int Partition(string A[], int left, int right)
 {
-  k = choosePivotIndex(A,left,right); // function to write
-  v = A[k];
-  swap(A[k],A[r]);
+  int k = choosePivotIndex(A,left,right);
+  string v = A[k];
+  swap(A[k],A[right]);
 
-  i = left - 1;
-  j = r;
+  int i = left - 1;
+  int j = right;
 
   while (true)
   {
@@ -236,10 +234,10 @@ int Partition(array A, int left, int right)
     }
     else
     {
-      swap(A(i),A(j));
+      swap(A[i],A[j]);
     }
   }
-  swap(A(i),A(r));
+  swap(A[i],A[right]);
   return i;
 }
 
@@ -248,16 +246,14 @@ void countingSort(list<Data *> &l)
   //
 }
 
-void quickSort(array A, int left, int right)
+void quickSort(string A[], int left, int right)
 {
-  if (left >= right)
+  if (left < right)
   {
-    break;
+    int i = Partition(A,left,right);
+    quickSort(A,left,i-1);
+    quickSort(A,i+1,right);
   }
-
-  i = Partition(A,left,right);
-  quickSort(A,left,i-1);
-  quickSort(A,i+1,r);
 }
 
 // returns True if a is less than b
@@ -299,7 +295,7 @@ bool compareMerge(Data *a, Data *b)
 }
 
 
-void initializeArraySSN(int size, list<Data *> &l)
+void initializeArraySSN(list<Data *> &l)
 {
   int i = 0;
   for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
@@ -307,4 +303,6 @@ void initializeArraySSN(int size, list<Data *> &l)
     SSNList[i] = (*it)->ssn;
     i++;
   }
+  cout << i << "\n";
+  cout << sizeof(SSNList) << "\n";
 }

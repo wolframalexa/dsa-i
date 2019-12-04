@@ -3,3 +3,9 @@ Using l.sort():
  T2: 2.5   s
  T3: 0.984 s
  T4: 3.234 s
+
+To do:
+ T1: insertion sort
+ T2:
+ T3: sort within same name
+ T4: 

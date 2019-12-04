@@ -110,12 +110,20 @@ int main() {
 
 // You may add global variables, functions, and/or
 // class defintions here if you wish.
+
+#include <array>
+
 int determineCase(list<Data *> &l);
 void initializeArraySSN(int size, list<Data *> &l);
 void countingSort(list<Data *> &l);
 void mergeSort(list<Data *> &l);
-void quickSort(list<Data *> &l);
+void quickSort(list<Data *> &l, int left, int right);
 bool compareMerge(Data *a, Data *b);
+void swap(T &a, T &b);
+int choosePivotIndex(array A, int left, int right);
+int Partition(array A, int left, int right);
+
+
 string SSNList[1100000] = {};
 
 
@@ -142,7 +150,6 @@ void sortDataList(list<Data *> &l) {
 // determine which list we're sorting, to use different strategies for each
 int determineCase(list<Data *> &l)
 {
-  list<Data *>::iterator it = l.begin();
   list<string> firstFewFN;
   int i = 0;
 
@@ -177,19 +184,80 @@ int determineCase(list<Data *> &l)
   }
 }
 
+template <typename T>
+void swap(T &a, T &b)
+{
+  T c = a;
+  a = b;
+  b = c;
+}
+
+int choosePivotIndex(array A, int left, int right)
+{
+  int m = (1+right)/2;
+  if A[left] > A[m]
+  {
+    swap(A[left],A[m]);
+  }
+  if A[m] > A[right]
+  {
+    swap(A[m],A[right])
+  }
+  if A[left] > A[m]
+  {
+    swap(A[l],A[m])
+  }
+  return m;
+}
+
+
+int Partition(array A, int left, int right)
+{
+  k = choosePivotIndex(A,left,right); // function to write
+  v = A[k];
+  swap(A[k],A[r]);
+
+  i = left - 1;
+  j = r;
+
+  while (true)
+  {
+    while (A[i]<v)
+    {
+      i++;
+    }
+    while (A[j]>v && j>i)
+    {
+      j--;
+    }
+    if (i>=j)
+    {
+      break;
+    }
+    else
+    {
+      swap(A(i),A(j));
+    }
+  }
+  swap(A(i),A(r));
+  return i;
+}
+
 void countingSort(list<Data *> &l)
 {
   //
 }
 
-void mergeSort(list<Data *> &l)
+void quickSort(array A, int left, int right)
 {
-  stable_sort(l.begin(),l.end(),compareMerge);
-}
+  if (left >= right)
+  {
+    break;
+  }
 
-void quickSort(list<Data *> &l)
-{
-
+  i = Partition(A,left,right);
+  quickSort(A,left,i-1);
+  quickSort(A,i+1,r);
 }
 
 // returns True if a is less than b

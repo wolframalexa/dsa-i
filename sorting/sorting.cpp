@@ -111,11 +111,13 @@ int main() {
 // You may add global variables, functions, and/or
 // class defintions here if you wish.
 int determineCase(list<Data *> &l);
-string initializeArray(int size, string datamember, list<Data *> &l);
-void radixSort(list<Data *> &l);
+void initializeArraySSN(int size, list<Data *> &l);
+void countingSort(list<Data *> &l);
 void mergeSort(list<Data *> &l);
 void quickSort(list<Data *> &l);
-string array[1100000]
+bool compareMerge(Data *a, Data *b);
+string SSNList[1100000] = {};
+
 
 void sortDataList(list<Data *> &l) {
   // Fill this in
@@ -123,6 +125,7 @@ void sortDataList(list<Data *> &l) {
   {
     case 1:
       cout << "Case 1\n";
+      mergeSort(l);
       break;
     case 2:
       cout << "Case 2\n";
@@ -174,14 +177,14 @@ int determineCase(list<Data *> &l)
   }
 }
 
-void radixSort(list<Data *> &l)
+void countingSort(list<Data *> &l)
 {
-
+  //
 }
 
 void mergeSort(list<Data *> &l)
 {
-
+  stable_sort(l.begin(),l.end(),compareMerge);
 }
 
 void quickSort(list<Data *> &l)
@@ -189,18 +192,51 @@ void quickSort(list<Data *> &l)
 
 }
 
-string initializeArraySSN(int size, string datamember, list<Data *> &l)
+// returns True if a is less than b
+bool compareMerge(Data *a, Data *b)
+{
+  if ((*a).lastName<(*b).lastName)
+  {
+    return true;
+  }
+  else if ((*a).lastName>(*b).lastName)
+  {
+    return false;
+  }
+  // break the tie
+  else
+  {
+    if ((*a).firstName<(*b).firstName)
+    {
+      return true;
+    }
+
+    else if ((*a).firstName>(*b).firstName)
+    {
+      return false;
+    }
+
+    else
+    {
+      if ((*a).ssn<(*b).ssn)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+  }
+}
+
+
+void initializeArraySSN(int size, list<Data *> &l)
 {
   int i = 0;
   for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
   {
-    array[i] = (*it)->ssn;
+    SSNList[i] = (*it)->ssn;
     i++;
   }
-  return array;
-}
-
-string initializeArrayFN(int size, list<Data *> &l)
-{
-
 }

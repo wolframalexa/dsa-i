@@ -4,8 +4,14 @@ Using l.sort():
  T3: 0.984 s
  T4: 3.234 s
 
+Using sort():
+ T1:
+ T2:
+ T3:
+ T4: 1.172 s
+
 To do:
  T1: insertion sort
  T2:
  T3: sort within same name
- T4: 
+ T4: fix copySSNToList: not displaying properly in output

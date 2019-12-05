@@ -116,14 +116,11 @@ int main() {
 int determineCase(list<Data *> &l);
 void initializeArraySSN(list<Data *> &l);
 void countingSort(list<Data *> &l);
-// void quickSort(string A[], int left, int right);
 bool compareMerge(Data *a, Data *b);
-// void swap(string &a, string &b);
-// int choosePivotIndex(string A, int left, int right);
-// int Partition(string A, int left, int right);
 void copySSNToList(list<Data *> &l, string A[]);
+bool nameIsSame(Data *p1, string name);
 string SSNList[1100000] = {};
-
+string temp[10] = {};
 
 void sortDataList(list<Data *> &l) {
   // Fill this in
@@ -136,18 +133,46 @@ void sortDataList(list<Data *> &l) {
       cout << "Case 2\n";
       break;
     case 3:
-      cout << "Case 3\n";
-      int n = l.size();
-      sort(l,l+n);
+    {
+/*      cout << "Case 3\n";
+      string previous = "0";
+      int j = 0;
+      int i = 0;
+
+      for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
+      {
+        while (nameIsSame(*it,previous))
+        {
+	  temp[j] = (*it)->ssn;
+          j++;
+          // add ssn to list
+        }
+
+        if (!nameIsSame(*it,previous))
+        {
+	  j = 0;
+          sort(temp,temp+10);
+        }
+
+        // sort ssns in mini-list and append to larger array
+
+
+        previous = (*it)->firstName;
+	i++;
+
+      }
+*/
       break;
+    }
+
     case 4:
+    {
       cout << "Case 4\n";
       initializeArraySSN(l);
       sort(SSNList,SSNList+1100000);
       copySSNToList(l,SSNList);
-
-//      quickSort(SSNList,0,1000000); // SEGFAULT HERE
       break;
+    }
   }
 }
 
@@ -188,6 +213,8 @@ int determineCase(list<Data *> &l)
   }
 }
 
+
+// issue here
 void copySSNToList(list<Data *> &l, string A[])
 {
   int i = 0;
@@ -198,137 +225,6 @@ void copySSNToList(list<Data *> &l, string A[])
   }
 }
 
-
-
-
-/* quicksort implementation is highly sketchy - sable, 2019
-
-void swap(string &a, string &b)
-{
-  string c = a;
-  a = b;
-  b = c;
-}
-
-int choosePivotIndex(string A[], int left, int right) // SEGFAULT HERE
-{
-  int m = (1+right)/2;
-
-  if (A[left] > A[m])
-  {
-    swap(A[left],A[m]);
-  }
-
-  if (A[m] > A[right])
-  {
-    swap(A[m],A[right]);
-  }
-
-  if (A[left] > A[m])
-  {
-    swap(A[left],A[m]);
-  }
-
-  cout << m << "\n";
-  return m; // segfault appears to be in the return statement
-}
-
-
-int Partition(string A[], int left, int right)
-{
-  int k = choosePivotIndex(A,left,right);
-  cout << "k is: " << k << "\n";
-  string v = A[k];
-  swap(A[k],A[right]);
-  cout << "v is: " << v << "\n";
-
-
-  int i = left - 1;
-  int j = right;
-
-  while (true)
-  {
-    while (A[i]<v)
-    {
-      i++;
-    }
-    while (A[j]>v && j>i)
-    {
-      j--;
-    }
-    if (i>=j)
-    {
-      break;
-    }
-    else
-    {
-      swap(A[i],A[j]);
-    }
-  }
-  swap(A[i],A[right]);
-  return i;
-}
-
-void countingSort(list<Data *> &l)
-{
-  //
-}
-
-void quickSort(string A[], int left, int right)
-{
-  cout << "quickSort called once" << "\n";
-
-  if (left < right)
-  {
-    cout << "enters if loop\n";
-    int i = Partition(A,left,right);
-    cout << "Partition index: " << i << "\n";
-    quickSort(A,left,i-1);
-    quickSort(A,i+1,right);
-  }
-}
-
-*/
-
-// returns True if a is less than b
-bool compareMerge(Data *a, Data *b)
-{
-  if ((*a).lastName<(*b).lastName)
-  {
-    return true;
-  }
-  else if ((*a).lastName>(*b).lastName)
-  {
-    return false;
-  }
-  // break the tie
-  else
-  {
-    if ((*a).firstName<(*b).firstName)
-    {
-      return true;
-    }
-
-    else if ((*a).firstName>(*b).firstName)
-    {
-      return false;
-    }
-
-    else
-    {
-      if ((*a).ssn<(*b).ssn)
-      {
-        return true;
-      }
-      else
-      {
-        return false;
-      }
-    }
-  }
-}
-
-
 void initializeArraySSN(list<Data *> &l)
 {
   int i = 0;
@@ -338,3 +234,13 @@ void initializeArraySSN(list<Data *> &l)
     i++;
   }
 }
+
+bool nameIsSame(Data* p1, string name)
+{
+  if ((p1)->firstName == name)
+  {
+    return true;
+  }
+  return false;
+}
+

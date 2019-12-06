@@ -115,11 +115,18 @@ int main() {
 
 int determineCase(list<Data *> &l);
 void initializeArraySSN(list<Data *> &l);
+void initializeArrayList(list<Data *> &l);
+bool comparatorT3(const Data *a, const Data *b);
+bool comparatorT12(const Data *a, const Data *b);
 void countingSort(list<Data *> &l);
-bool compareMerge(Data *a, Data *b);
 void copySSNToList(list<Data *> &l, string A[]);
-bool nameIsSame(Data *p1, string name);
+void copyGeneralToList(list<Data *> &l, Data* A[]);
+bool nameIsSame(Data *p1, Data *p2);
+void insertionSort(list<Data *> &l);
+
+
 string SSNList[1100000] = {};
+Data* GeneralList[1100000] = {};
 string temp[10] = {};
 
 void sortDataList(list<Data *> &l) {
@@ -128,47 +135,44 @@ void sortDataList(list<Data *> &l) {
   {
     case 1:
       cout << "Case 1\n";
+      insertionSort(l);
       break;
     case 2:
       cout << "Case 2\n";
+//      sort(l.begin(),l.end());
       break;
     case 3:
     {
-/*      cout << "Case 3\n";
-      string previous = "0";
-      int j = 0;
-      int i = 0;
+      initializeArrayList(l);
+      int start = 0;
+      int end = 0;
 
-      for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
+      while (end <=  l.size())
       {
-        while (nameIsSame(*it,previous))
+//	end++;
+        if (!nameIsSame(GeneralList[end],GeneralList[end+1]))
         {
-	  temp[j] = (*it)->ssn;
-          j++;
-          // add ssn to list
-        }
-
-        if (!nameIsSame(*it,previous))
-        {
-	  j = 0;
-          sort(temp,temp+10);
-        }
-
-        // sort ssns in mini-list and append to larger array
-
-
-        previous = (*it)->firstName;
-	i++;
-
+//	  cout << GeneralList[end]->firstName << " , " << GeneralList[end-1]->firstName << "\n";
+          sort(GeneralList+start,GeneralList+end,comparatorT3); // this will break ?
+// ISSUE HERE: comparator does not work? sort does not sort ssns
+	  cout << GeneralList[start]->firstName << " " << GeneralList[start]->ssn << " , " << GeneralList[end]->firstName << " " << GeneralList[end]->ssn << "\n";
+	  start = end+1;
+	}
+        end++;
       }
-*/
-      break;
+
+
+//      sort(l.begin(),l.end());
+
+/*      cout << "Case 3\n";
+*/      break;
     }
 
     case 4:
     {
       cout << "Case 4\n";
       initializeArraySSN(l);
+      cout << "First SSN: " << SSNList[0] << "\n";
       sort(SSNList,SSNList+1100000);
       copySSNToList(l,SSNList);
       break;
@@ -214,16 +218,30 @@ int determineCase(list<Data *> &l)
 }
 
 
-// issue here
 void copySSNToList(list<Data *> &l, string A[])
 {
-  int i = 0;
+  int i = 1100000 - l.size();
   for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
   {
     (*it)->ssn = A[i];
     i++;
   }
 }
+
+void copyGeneralToList(list<Data *> &l, Data* A[])
+{
+  int i = 1100000 - l.size();
+  for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
+  {
+    (*it)->lastName = A[i]->lastName;
+    (*it)->firstName = A[i]->firstName;
+    (*it)->ssn = A[i]->ssn;
+    i++;
+  }
+
+}
+
+
 
 void initializeArraySSN(list<Data *> &l)
 {
@@ -235,12 +253,58 @@ void initializeArraySSN(list<Data *> &l)
   }
 }
 
-bool nameIsSame(Data* p1, string name)
+void initializeArrayList(list<Data *> &l)
 {
-  if ((p1)->firstName == name)
+  int i = 0;
+  for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
+  {
+    GeneralList[i] = (*it);
+    i++;
+  }
+}
+
+bool nameIsSame(Data* p1, Data* p2)
+{
+  if ((p1)->firstName == (p2)->firstName)
   {
     return true;
   }
   return false;
 }
 
+bool comparatorT3(const Data *a, const Data *b)
+{
+  return (a->ssn) < (b->ssn);
+}
+
+
+bool comparatorT12(const Data *a, const Data *b)
+{
+  if ((a->lastName) != (b->lastName))
+  {
+    return a->lastName < b->lastName;
+  }
+  else if ((a->firstName) != (b->lastName))
+  {
+    return a->firstName < b->firstName;
+  }
+  else
+  {
+    return a->ssn < b->ssn;
+  }
+}
+
+void insertionSort(list<Data *> &l)
+{
+  list<Data *>::iterator begin = l.begin();
+  list<Data *>::iterator end = l.end();
+  list<Data *>::iterator it;
+
+  for (list<Data *>::iterator it2 = next(begin, 1); it2 != end; it2++) {
+    Data* temp = *it2;
+    for (it = it2; (it != begin) && (comparatorT12(temp, *(prev(it, 1)))); it--) {
+      *it = *(prev(it, 1));
+    }
+    *it  = temp;
+  }
+}

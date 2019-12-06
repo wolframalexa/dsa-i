@@ -8,10 +8,10 @@ Using sort():
  T1:
  T2:
  T3:
- T4: 1.172 s
+ T4: 1.656 s
 
 To do:
- T1: insertion sort
- T2:
- T3: sort within same name
- T4: fix copySSNToList: not displaying properly in output
+ T1: insertion sort: takes forever (infinite loop?)
+ T2: same issue as T1
+ T3: sort within same name: does not appear to sort ssns
+ T4: finished with sort()

@@ -115,7 +115,7 @@ int main() {
 
 bool comparator(Data *a, Data *b)
 {
-  if ((*a).lastName<(*b).lastName)
+  if ((*a).lastName < (*b).lastName)
   {
     return a>b;
   }

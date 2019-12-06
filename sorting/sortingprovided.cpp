@@ -116,8 +116,8 @@ int main() {
 int determineCase(list<Data *> &l);
 void initializeArraySSN(list<Data *> &l);
 void initializeArrayList(list<Data *> &l);
-bool comparatorT3(const Data *a, const Data *b);
-bool comparatorT12(const Data *a, const Data *b);
+bool comparatorT3(Data* a, Data* b);
+bool comparatorT12(Data *a, Data *b);
 void countingSort(list<Data *> &l);
 void copySSNToList(list<Data *> &l, string A[]);
 void copyGeneralToList(list<Data *> &l, Data* A[]);
@@ -131,11 +131,17 @@ string temp[10] = {};
 
 void sortDataList(list<Data *> &l) {
   // Fill this in
+  int listsize = l.size();
   switch(determineCase(l))
   {
     case 1:
       cout << "Case 1\n";
-      insertionSort(l);
+      initializeArrayList(l);
+      cout << "initialized\n";
+      sort(GeneralList,GeneralList+listsize,comparatorT12);
+      cout << "sorted\n";
+      copyGeneralToList(l,GeneralList);
+      cout << "copied\n";
       break;
     case 2:
       cout << "Case 2\n";
@@ -146,21 +152,30 @@ void sortDataList(list<Data *> &l) {
       initializeArrayList(l);
       int start = 0;
       int end = 0;
-
+/*
       while (end <=  l.size())
       {
 //	end++;
         if (!nameIsSame(GeneralList[end],GeneralList[end+1]))
         {
 //	  cout << GeneralList[end]->firstName << " , " << GeneralList[end-1]->firstName << "\n";
-          sort(GeneralList+start,GeneralList+end,comparatorT3); // this will break ?
+          sort(GeneralList+start,GeneralList+end+1,comparatorT3); // this will break ?
 // ISSUE HERE: comparator does not work? sort does not sort ssns
-	  cout << GeneralList[start]->firstName << " " << GeneralList[start]->ssn << " , " << GeneralList[end]->firstName << " " << GeneralList[end]->ssn << "\n";
+	  cout << start << GeneralList[start]->firstName << " " << GeneralList[start]->ssn << " , " << end<<GeneralList[end]->firstName << " " << GeneralList[end]->ssn << "\n";
 	  start = end+1;
+          end = start+1;
 	}
         end++;
       }
-
+*/
+	while(end < l.size()) {
+		++end;
+		if(!nameIsSame(GeneralList[end], GeneralList[end-1])) {
+			sort(GeneralList+start, GeneralList+end, comparatorT3);
+//			cout << start << GeneralList[start]->firstName << " " << GeneralList[start]->ssn << " , " << end-1 << GeneralList[end-1]->firstName << " " << GeneralList[end-1]->ssn << "\n";
+		start = end;
+		}
+        }
 
 //      sort(l.begin(),l.end());
 
@@ -233,9 +248,9 @@ void copyGeneralToList(list<Data *> &l, Data* A[])
   int i = 1100000 - l.size();
   for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
   {
-    (*it)->lastName = A[i]->lastName;
-    (*it)->firstName = A[i]->firstName;
-    (*it)->ssn = A[i]->ssn;
+    (*it)->lastName = (A[i])->lastName;
+    (*it)->firstName = (A[i])->firstName;
+    (*it)->ssn = (A[i])->ssn;
     i++;
   }
 
@@ -272,19 +287,19 @@ bool nameIsSame(Data* p1, Data* p2)
   return false;
 }
 
-bool comparatorT3(const Data *a, const Data *b)
+bool comparatorT3(Data* a, Data* b)
 {
-  return (a->ssn) < (b->ssn);
+  return a->ssn < b->ssn;
 }
 
 
-bool comparatorT12(const Data *a, const Data *b)
+bool comparatorT12(Data* a, Data* b)
 {
-  if ((a->lastName) != (b->lastName))
+  if (a->lastName != b->lastName)
   {
     return a->lastName < b->lastName;
   }
-  else if ((a->firstName) != (b->lastName))
+  else if (a->lastName == b->lastName)
   {
     return a->firstName < b->firstName;
   }

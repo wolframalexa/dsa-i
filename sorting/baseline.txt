@@ -5,10 +5,16 @@ Using l.sort():
  T4: 3.234 s
 
 Using sort():
- T1:
- T2:
+ T1: 0.234
+ T2: 2.813
  T3:
  T4: 1.656 s
+
+Presubmission 1:
+ T1: 0.313 s
+ T2: 3.843 s
+ T3: 1.094 s
+ T4: 1.641 s
 
 To do:
  T1: insertion sort: takes forever (infinite loop?)

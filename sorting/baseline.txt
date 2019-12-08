@@ -11,13 +11,29 @@ Using sort():
  T4: 1.656 s
 
 Presubmission 1:
- T1: 0.313 s
- T2: 3.843 s
- T3: 1.094 s
- T4: 1.641 s
+My computer / Sable's computer:
+
+ T1: 0.313 s / 0.275978
+ T2: 3.843 s / 3.9644
+ T3: 1.094 s / did not run
+ T4: 1.641 s / 1.15302
+
+Using stable_sort() (provided implementation of mergesort):
+ T1: 0.25 s
+ T2: 2.906 s
+ T3: 1.313 s (but incorrect)
+ T4: 1.844 s
+
 
 To do:
- T1: insertion sort: takes forever (infinite loop?)
- T2: same issue as T1
+ T1: need a faster sort - will try provided mergesort
+ T2: 
  T3: figure out a faster sort!
- T4: finished with sort()
+ T4: figure out memory issues with arrays for bucket/counting sort
+
+
+Current fastest sort:
+ T1: sort()
+ T2: l.sort()
+ T3: l.sort()
+ T4: my implementation of sort()

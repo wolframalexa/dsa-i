@@ -7,7 +7,7 @@ Using l.sort():
 Using sort():
  T1: 0.234
  T2: 2.813
- T3:
+ T3: never ends :/
  T4: 1.656 s
 
 Presubmission 1:
@@ -19,5 +19,5 @@ Presubmission 1:
 To do:
  T1: insertion sort: takes forever (infinite loop?)
  T2: same issue as T1
- T3: sort within same name: does not appear to sort ssns
+ T3: figure out a faster sort!
  T4: finished with sort()

@@ -118,23 +118,20 @@ void initializeArraySSN(list<Data *> &l);
 void initializeArrayList(list<Data *> &l);
 bool comparatorT3(Data* a, Data* b);
 bool comparatorT12(Data* a, Data* b);
-void countingSort(list<Data *> &l);
 void copySSNToList(list<Data *> &l, string A[]);
 void copyGeneralToList(list<Data *> &l, Data* A[]);
 bool nameIsSame(Data *p1, Data *p2);
 void insertionSort(list<Data *> &l);
-void radixSort(int A[]);
+void countingSort(int A[]);
 void SSNToInt(list<Data *> &l);
 
 
 
 string SSNList[1100000] = {};
 Data* GeneralList[1100000] = {};
-//int SSNInt1[500000000] = {};
-//int SSNInt2[500000000] = {};
-//bool RadixArray1[500000000] = {};
-//bool RadixArray2[500000000] = {};
-void copyBackT4(bool A[], bool B[], list<Data *> &l);
+int SSNInt[999999999] = {};
+bool CountingArray[999999999] = {};
+void copyBackT4(bool A[], list<Data *> &l);
 
 
 void sortDataList(list<Data *> &l) {
@@ -175,10 +172,9 @@ void sortDataList(list<Data *> &l) {
     {
       SSNToInt(l); // issue here!
       cout << "ssn to int successful\n";
-      radixSort(SSNInt1);
-      radixSort(SSNInt2);
+      countingSort(SSNInt);
       cout << "sort successful\n";
-      copyBackT4(RadixArray1, RadixArray2, l);
+      copyBackT4(CountingArray, l);
       cout << "copy back successful\n";
       break;
     }
@@ -316,45 +312,31 @@ void insertionSort(list<Data *> &l)
 
 void SSNToInt(list<Data *> &l)
 {
-/*
   int i = 0;
-  list<Data *>::iterator it;
 
-  for (it = l.begin(); i < 500000000; it++)
+  for (list<Data *>::iterator it = l.begin(); i < 1000000000; it++)
   {
     string str = (*it)->ssn;
-    SSNInt1[i] = str[0]*100000000+str[1]*10000000+str[2]*1000000+str[4]*100000+str[5]*10000+str[7]*1000+str[8]*100+str[9]*10+str[10];
+    SSNInt[i] = str[0]*100000000+str[1]*10000000+str[2]*1000000+str[4]*100000+str[5]*10000+str[7]*1000+str[8]*100+str[9]*10+str[10];
     i++;
   }
-
-  for (i = 500000000; i < 1000000000; it++)
-  {
-    string str = (*it)->ssn;
-    SSNInt2[i-500000000] = str[0]*100000000+str[1]*10000000+str[2]*1000000+str[4]*100000+str[5]*10000+str[7]*1000+str[8]*100+str[9]*10+str[10];
-    i++;
-  }
-*/
 }
 
 
-void radixSort(int A[])
+void countingSort(int A[])
 {
 
   int i = 0;
   cout << "sort function called\n";
-  while (i < 500000000)
-  {
-    RadixArray1[A[i]] = true;
-    i++;
-  }
   while (i < 1000000000)
   {
-    RadixArray2[A[i]-500000000] = true;
+    CountingArray[A[i]] = true;
+    i++;
   }
 }
 
 
-void copyBackT4(bool A[], bool B[], list<Data *> &l)
+void copyBackT4(bool A[], list<Data *> &l)
 {
 
   int i = 0;
@@ -365,11 +347,7 @@ void copyBackT4(bool A[], bool B[], list<Data *> &l)
       string str = to_string(i);
       (*it)->ssn = str.substr(0,2) + "-" + str.substr(3,4) + " " + str.substr(5,8);
     }
-    else if (B[i] == true)
-    {
-      string str = to_string(i+500000000);
-      (*it)->ssn = str.substr(0,2) + "-" + str.substr(3,4) + " " + str.substr(5,8);
-    }
+
     i++;
   }
 }

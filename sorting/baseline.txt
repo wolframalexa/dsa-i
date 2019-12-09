@@ -24,6 +24,11 @@ Using stable_sort() (provided implementation of mergesort):
  T3: 1.313 s (but incorrect)
  T4: 1.844 s
 
+Using my implementation of sorting in place:
+ T1: 0.172 s
+ T2: 2.969 s
+ T3: 1.610 s
+ T4: 3.858 s
 
 To do:
  T1: sort inplace: figure out how to implement w pointers instead of indices
@@ -31,8 +36,8 @@ To do:
  T3: figure out a faster sort!
  T4: figure out why segfaults
 
-Current fastest sort:
- T1: sort() 				presub 1
- T2: l.sort()				presub 1
+Current fastest sort on Sable's computer:
+ T1: sorting in place		        presub 1
+ T2: sorting in place			presub 1
  T3: l.sort()				idk dude
  T4: my implementation of sort()	presub 1

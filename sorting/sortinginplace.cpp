@@ -121,13 +121,12 @@ bool comparatorT12(Data* a, Data* b);
 void copySSNToList(list<Data *> &l, string A[]);
 void copyGeneralToList(list<Data *> &l, Data* A[]);
 bool nameIsSame(Data *p1, Data *p2);
-void SortInPlace(Data* A[], int a[]);
+void SortInPlace(Data* A[], int a[], int N);
 
 
 string    SSNList[1100000] = {};
 Data* GeneralList[1100000] = {};
 int    IndexArray[1100000] = {};
-Data*      sorted[1100000] = {};
 
 void sortDataList(list<Data *> &l) {
   // Fill this in
@@ -135,16 +134,10 @@ void sortDataList(list<Data *> &l) {
   switch(determineCase(l))
   {
     case 1:
-      cout << "Case 1\n";
-      initializeArrayList(l);
-      cout << "Array initialized\n";
-      SortInPlace(GeneralList, IndexArray);
-      cout << "Sorts\n";
-      copyGeneralToList(l, GeneralList);
-      break;
     case 2:
-      cout << "Case 2\n";
-//      sort(l.begin(),l.end());
+      initializeArrayList(l);
+      SortInPlace(GeneralList, IndexArray, listsize);
+      copyGeneralToList(l, GeneralList);
       break;
     case 3:
     {
@@ -170,7 +163,7 @@ void sortDataList(list<Data *> &l) {
     case 4:
     {
       initializeArrayList(l);
-      SortInPlace(GeneralList, IndexArray);
+      SortInPlace(GeneralList, IndexArray, listsize);
       copyGeneralToList(l, GeneralList);
       break;
     }
@@ -326,25 +319,12 @@ void sortInPlace(list<Data *> &l)
 }
 */
 
-void SortInPlace(Data* A[], int a[])
+void SortInPlace(Data* A[], int a[], int N)
 {
-  cout << "sort called\n";
-  sort(A, A + 1100000, comparatorT12);
-  cout << "sort is the problem\n";
+  sort(A, A + N, comparatorT12);
 
-  for (int i = 0; i != 1100000; i++)
+  for (int i = 0; i != N; i++)
   {
-    cout << i << "\n";
-    A[i] = A[a[i]];
-  }
-
-  for (int i = 0; i != 1100000; i++)
-  {
-    if (a[i] == i)
-    {
-      cout << "in right place\n";
-      continue;
-    }
     Data* V = A[i];
     int j = i;
     while (a[j] != i)

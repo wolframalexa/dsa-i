@@ -122,14 +122,13 @@ void copySSNToList(list<Data *> &l, string A[]);
 void copyGeneralToList(list<Data *> &l, Data* A[]);
 bool nameIsSame(Data *p1, Data *p2);
 void insertionSort(list<Data *> &l);
-void countingSort(int A[]);
+void countingSort(list<Data *> &l);
 void SSNToInt(list<Data *> &l);
 
 
 
 string SSNList[1100000] = {};
 Data* GeneralList[1100000] = {};
-int SSNInt[999999999] = {};
 bool CountingArray[999999999] = {};
 void copyBackT4(bool A[], list<Data *> &l);
 
@@ -170,9 +169,7 @@ void sortDataList(list<Data *> &l) {
 
     case 4:
     {
-      SSNToInt(l); // issue here!
-      cout << "ssn to int successful\n";
-      countingSort(SSNInt);
+      countingSort(l);
       cout << "sort successful\n";
       copyBackT4(CountingArray, l);
       cout << "copy back successful\n";
@@ -310,42 +307,32 @@ void insertionSort(list<Data *> &l)
   }
 }
 
-void SSNToInt(list<Data *> &l)
+void countingSort(list<Data *> &l)
 {
   int i = 0;
 
-  for (list<Data *>::iterator it = l.begin(); i < 1000000000; it++)
+  for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
   {
     string str = (*it)->ssn;
-    SSNInt[i] = str[0]*100000000+str[1]*10000000+str[2]*1000000+str[4]*100000+str[5]*10000+str[7]*1000+str[8]*100+str[9]*10+str[10];
+//    cout << str << "\n";
+//    cout << str[0] << ", " << str[1] << ", " << str[2] << ", " << str[3] << "\n";
+    int num = stoi(str.substr(0,2))*1000000 + stoi(str.substr(4,5))*10000 + stoi(str.substr(7,10));
+//    int num = stoi(str[0],nullptr)*100000000+ stoi(str[1])*10000000+stoi(str[2])*1000000+stoi(str[4])*100000+stoi(str[5])*10000+stoi(str[7])*1000+stoi(str[8])*100+stoi(str[9])*10+stoi(str[10]);
+//    cout << num << "\n";
+    CountingArray[num] = true;
     i++;
   }
 }
-
-
-void countingSort(int A[])
-{
-
-  int i = 0;
-  cout << "sort function called\n";
-  while (i < 1000000000)
-  {
-    CountingArray[A[i]] = true;
-    i++;
-  }
-}
-
 
 void copyBackT4(bool A[], list<Data *> &l)
 {
-
   int i = 0;
   for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
   {
-    if (A[i] == true)
+    if (A[i] == 1)
     {
       string str = to_string(i);
-      (*it)->ssn = str.substr(0,2) + "-" + str.substr(3,4) + " " + str.substr(5,8);
+      (*it)->ssn = str.substr(0,2) + "-" + str.substr(3,4) + "-" + str.substr(5,8);
     }
 
     i++;

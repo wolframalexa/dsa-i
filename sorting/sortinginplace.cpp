@@ -121,13 +121,13 @@ bool comparatorT12(Data* a, Data* b);
 void copySSNToList(list<Data *> &l, string A[]);
 void copyGeneralToList(list<Data *> &l, Data* A[]);
 bool nameIsSame(Data *p1, Data *p2);
-void sortInPlace(list<Data *> &l);
+void SortInPlace(Data* A[], int a[]);
 
 
-string SSNList[1100000] = {};
+string    SSNList[1100000] = {};
 Data* GeneralList[1100000] = {};
-
-
+int    IndexArray[1100000] = {};
+Data*      sorted[1100000] = {};
 
 void sortDataList(list<Data *> &l) {
   // Fill this in
@@ -136,7 +136,11 @@ void sortDataList(list<Data *> &l) {
   {
     case 1:
       cout << "Case 1\n";
-      insertionSort(l);
+      initializeArrayList(l);
+      cout << "Array initialized\n";
+      SortInPlace(GeneralList, IndexArray);
+      cout << "Sorts\n";
+      copyGeneralToList(l, GeneralList);
       break;
     case 2:
       cout << "Case 2\n";
@@ -165,13 +169,9 @@ void sortDataList(list<Data *> &l) {
 
     case 4:
     {
-      SSNToInt(l); // issue here!
-      cout << "ssn to int successful\n";
-      radixSort(SSNInt1);
-      radixSort(SSNInt2);
-      cout << "sort successful\n";
-      copyBackT4(RadixArray1, RadixArray2, l);
-      cout << "copy back successful\n";
+      initializeArrayList(l);
+      SortInPlace(GeneralList, IndexArray);
+      copyGeneralToList(l, GeneralList);
       break;
     }
   }
@@ -227,7 +227,7 @@ void copySSNToList(list<Data *> &l, string A[])
 
 void copyGeneralToList(list<Data *> &l, Data* A[])
 {
-  int i = 1100000 - l.size();
+  int i = 0;
   for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
   {
     (*it) = (A[i]);
@@ -287,28 +287,74 @@ bool comparatorT12(Data* a, Data* b)
   }
 }
 
-// figure out datatypes for this whole function!
-void sortInPlace(list<Data *> &l, Data* a[])
+/* figure out datatypes for this whole function!
+void sortInPlace(list<Data *> &l)
 {
-  N = l.size();
-  for (int i = 0; i != N; i++)
+  list<Data *> SortedPointers;
+
+  for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
   {
-    if (a[i] == i)
+    SortedPointers.push_back();
+  }
+
+  list<Data *>::iterator begin = l.begin();
+  list<Data *>::iterator end = l.end();
+  list<Data *>::iterator it;
+
+  for (list<Data *>::iterator it2 = l.begin(); it2 != l.end(); it2++)
+  {
+    if ((*it) == (*it)) // if item is in place do not sort it, this line needs revising
     {
       continue;
     }
-    Data* v = a[i];
-    int j = i;
-    
-    while (a[j] != i)
+
+    Data v = *it2;
+    Data* j = it2;
+
+    while (a[j] != it2)
     {
       int k = j;
       j = a[j]; // wrong datatype
       A[k] = A[j]; // figure out how to implement this line
       a(k) = k; // these are also the wrong datatypes
     }
-    A[j] = v; 
+
+    A[j] = v;
     a[j] = j;
   }
+  it++;
+}
+*/
 
+void SortInPlace(Data* A[], int a[])
+{
+  cout << "sort called\n";
+  sort(A, A + 1100000, comparatorT12);
+  cout << "sort is the problem\n";
+
+  for (int i = 0; i != 1100000; i++)
+  {
+    cout << i << "\n";
+    A[i] = A[a[i]];
+  }
+
+  for (int i = 0; i != 1100000; i++)
+  {
+    if (a[i] == i)
+    {
+      cout << "in right place\n";
+      continue;
+    }
+    Data* V = A[i];
+    int j = i;
+    while (a[j] != i)
+    {
+      int k = j;
+      j = a[i];
+      A[k] = A[j];
+      a[k] = k;
+    }
+    A[j] = V;
+    a[j] = j;
+  }
 }

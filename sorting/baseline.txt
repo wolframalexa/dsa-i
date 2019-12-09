@@ -26,7 +26,7 @@ Using stable_sort() (provided implementation of mergesort):
 
 
 To do:
- T1: need a faster sort - will try indirect / inplace sorting
+ T1: sort inplace: figure out how to implement w pointers instead of indices
  T2: 
  T3: figure out a faster sort!
  T4: figure out memory issues with arrays for bucket/counting sort - ask sable about assembler errors

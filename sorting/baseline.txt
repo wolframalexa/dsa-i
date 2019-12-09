@@ -36,7 +36,8 @@ Using my implementation of sorting in place:
 
 
 To do:
- T1: sort inplace: figure out how to implement w pointers instead of indices
+ T1: sort indirectly: copy the first few char of last name to a struct and compare those.
+    if they're the same, then use the data pointer in the struct to go to the comparatorT12. Currently is not very fast bc lots of indirection
  T2: 
  T3: 
  T4: 

@@ -111,7 +111,15 @@ int main() {
 // You may add global variables, functions, and/or
 // class defintions here if you wish.
 
-#include <array>
+class MyNode
+{
+  public:
+    Data* data;
+    string lastName;
+    string firstName;
+    string shortSSN;
+};
+
 
 int determineCase(list<Data *> &l);
 void initializeArraySSN(list<Data *> &l);
@@ -122,11 +130,19 @@ void copySSNToList(list<Data *> &l, string A[]);
 void copyGeneralToList(list<Data *> &l, Data* A[]);
 bool nameIsSame(Data *p1, Data *p2);
 void SortInPlace(Data* A[], int a[], int N);
-
+void initializeNodes(list<Data *> &l);
+void SortNodesInPlace(MyNode* A[], int a[], int N);
+list<MyNode *> listNodes;
+bool comparatorNodes(MyNode* a, MyNode* b);
+void initializeArrayNodes(list<MyNode *> &l);
+void copyNodeToList(list<Data *> &l, MyNode* A[]);
 
 string    SSNList[1100000] = {};
 Data* GeneralList[1100000] = {};
+MyNode* NodesArray[1100000] = {};
 int    IndexArray[1100000] = {};
+MyNode*   shortData[1100000] = {};
+
 
 void sortDataList(list<Data *> &l) {
   // Fill this in
@@ -135,9 +151,10 @@ void sortDataList(list<Data *> &l) {
   {
     case 1:
     case 2:
-      initializeArrayList(l);
-      SortInPlace(GeneralList, IndexArray, listsize);
-      copyGeneralToList(l, GeneralList);
+      initializeNodes(l);
+      initializeArrayNodes(listNodes);
+      SortNodesInPlace(NodesArray, IndexArray, listsize);
+      copyNodeToList(l, NodesArray);
       break;
     case 3:
     {
@@ -228,6 +245,15 @@ void copyGeneralToList(list<Data *> &l, Data* A[])
   }
 }
 
+void copyNodeToList(list<Data *> &l, MyNode* A[])
+{
+  int i = 0;
+  for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
+  {
+    (*it) = (A[i]->data);
+    i++;
+  }
+}
 
 void initializeArraySSN(list<Data *> &l)
 {
@@ -245,6 +271,31 @@ void initializeArrayList(list<Data *> &l)
   for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
   {
     GeneralList[i] = (*it);
+    i++;
+  }
+}
+
+void initializeNodes(list<Data *> &l)
+{
+  int i = 0;
+  for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
+  {
+    MyNode *pNode = new MyNode();
+    pNode->data = (*it);
+    pNode->lastName = (*it)->lastName.substr(0,6);
+    pNode->firstName = (*it)->firstName;
+    pNode->shortSSN = (*it)->ssn.substr(0,2);
+    listNodes.push_back(pNode);
+    i++;
+  }
+}
+
+void initializeArrayNodes(list<MyNode *> &l)
+{
+  int i = 0;
+  for (list<MyNode *>::iterator it = l.begin(); it != l.end(); it++)
+  {
+    NodesArray[i] = (*it);
     i++;
   }
 }
@@ -277,6 +328,22 @@ bool comparatorT12(Data* a, Data* b)
   else
   {
     return a->ssn < b->ssn;
+  }
+}
+
+bool comparatorNodes(MyNode* a, MyNode* b)
+{
+  if (a->lastName != b->lastName)
+  {
+    return a->lastName < b->lastName;
+  }
+  else if (a->firstName != b->firstName)
+  {
+    return a->firstName < b->firstName;
+  }
+  else
+  {
+    return a->shortSSN < b->shortSSN;
   }
 }
 
@@ -338,3 +405,24 @@ void SortInPlace(Data* A[], int a[], int N)
     a[j] = j;
   }
 }
+
+void SortNodesInPlace(MyNode* A[], int a[], int N)
+{
+  sort(A, A + N, comparatorNodes);
+
+  for (int i = 0; i != N; i++)
+  {
+    MyNode* V = A[i];
+    int j = i;
+    while (a[j] != i)
+    {
+      int k = j;
+      j = a[i];
+      A[k] = A[j];
+      a[k] = k;
+    }
+    A[j] = V;
+    a[j] = j;
+  }
+}
+

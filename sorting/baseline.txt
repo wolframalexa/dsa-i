@@ -30,11 +30,16 @@ Using my implementation of sorting in place:
  T3: 1.610 s
  T4: 3.858 s
 
+
+
+
+
+
 To do:
  T1: sort inplace: figure out how to implement w pointers instead of indices
  T2: 
- T3: figure out a faster sort!
- T4: figure out why segfaults
+ T3: 
+ T4: 
 
 Current fastest sort on Sable's computer:
  T1: sorting in place		        presub 1

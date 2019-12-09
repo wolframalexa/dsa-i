@@ -122,14 +122,12 @@ void copySSNToList(list<Data *> &l, string A[]);
 void copyGeneralToList(list<Data *> &l, Data* A[]);
 bool nameIsSame(Data *p1, Data *p2);
 void insertionSort(list<Data *> &l);
-void countingSort(int A[]);
-void SSNToInt(list<Data *> &l);
+void countingSort(list<Data *> &l);
 
 
 
 string SSNList[1100000] = {};
 Data* GeneralList[1100000] = {};
-int SSNInt[999999999] = {};
 bool CountingArray[999999999] = {};
 void copyBackT4(bool A[], list<Data *> &l);
 
@@ -168,8 +166,7 @@ void sortDataList(list<Data *> &l) {
 
     case 4:
     {
-      SSNToInt(l);
-      countingSort(SSNInt);
+      countingSort(l);
       copyBackT4(CountingArray, l);
       break;
     }
@@ -286,31 +283,15 @@ bool comparatorT12(Data* a, Data* b)
   }
 }
 
-void SSNToInt(list<Data *> &l)
+void countingSort(list<Data *> &l)
 {
-  int i = 0;
-
-  for (list<Data *>::iterator it = l.begin(); i < 1000000000; it++)
+  for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
   {
     string str = (*it)->ssn;
-    SSNInt[i] = str[0]*100000000+str[1]*10000000+str[2]*1000000+str[4]*100000+str[5]*10000+str[7]*1000+str[8]*100+str[9]*10+str[10];
-    i++;
+    int a = str[0]*100000000+str[1]*10000000+str[2]*1000000+str[4]*100000+str[5]*10000+str[7]*1000+str[8]*100+str[9]*10+str[10];
+    CountingArray[a] = true;
   }
 }
-
-
-void countingSort(int A[])
-{
-
-  int i = 0;
-  cout << "sort function called\n";
-  while (i < 1000000000)
-  {
-    CountingArray[A[i]] = true;
-    i++;
-  }
-}
-
 
 void copyBackT4(bool A[], list<Data *> &l)
 {

@@ -29,11 +29,10 @@ To do:
  T1: sort inplace: figure out how to implement w pointers instead of indices
  T2: 
  T3: figure out a faster sort!
- T4: figure out memory issues with arrays for bucket/counting sort - ask sable about assembler errors
-
+ T4: figure out why segfaults
 
 Current fastest sort:
- T1: sort()
- T2: l.sort()
- T3: l.sort()
- T4: my implementation of sort()
+ T1: sort() 				presub 1
+ T2: l.sort()				presub 1
+ T3: l.sort()				idk dude
+ T4: my implementation of sort()	presub 1

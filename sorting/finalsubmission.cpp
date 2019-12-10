@@ -66,8 +66,8 @@ void writeDataList(const list<Data *> &l, const string &filename) {
 
   // Write the data
   for (auto pData:l) {
-    output << pData->lastName << " "
-           << pData->firstName << " "
+    output << pData->lastName << " " 
+           << pData->firstName << " " 
            << pData->ssn << "\n";
   }
 
@@ -111,66 +111,33 @@ int main() {
 // You may add global variables, functions, and/or
 // class defintions here if you wish.
 
-#include <array>
-
-struct Node
-{
-  Data* ptr;
-  char first;
-  string smallSSN;
-
-  Node(Data* ptr1, char first1, string smallSSN)
-  {
-    ptr = ptr1;
-    first = first1;
-    smallSSN = smallSSN;
-  }
-};
-
-
 int determineCase(list<Data *> &l);
 void initializeArraySSN(list<Data *> &l);
 void initializeArrayList(list<Data *> &l);
-bool comparatorT3(Node* a, Node* b);
-bool comparatorT12(Node* a, Node* b);
+bool comparatorT12(Data *a, Data *b);
 void copySSNToList(list<Data *> &l, string A[]);
 void copyGeneralToList(list<Data *> &l, Data* A[]);
-bool nameIsSame(Node *p1, Node *p2);
-void SortInPlaceNew(list<Data *> &l, Node* A[], int N);
 
 
-void initializeNodeArray(list<Data *> &l);
-
+string SSNList[1100000] = {};
 Data* GeneralList[1100000] = {};
-string    SSNList[1100000] = {};
-Node*   NodeArray[1100000] = {};
 
 void sortDataList(list<Data *> &l) {
-  // Fill this in
   int listsize = l.size();
   switch(determineCase(l))
   {
     case 1:
     case 2:
-      initializeNodeArray(l);
-      SortInPlaceNew(l, NodeArray, listsize);
+      initializeArrayList(l);
+      sort(GeneralList,GeneralList+listsize,comparatorT12);
+      copyGeneralToList(l,GeneralList);
       break;
     case 3:
     {
-      initializeNodeArray(l);
-      int start = 0;
-      int end = 0;
-      while (end <  l.size()-1)
-      {
-        ++end;
-        if(!nameIsSame(NodeArray[end], NodeArray[end-1]))
-        {
-          sort(NodeArray+start, NodeArray + end, comparatorT3);
-          start = end;
-        }
-      }
+      l.sort(comparatorT12);
       break;
     }
+
     case 4:
     {
       initializeArraySSN(l);
@@ -206,8 +173,8 @@ int determineCase(list<Data *> &l)
     return 4;
   }
 
-  // possible for it to be 2 or 3
-  else if (firstFewFN.size() < 4)
+  // possible to be many, but if few, likely case 3
+  else if (firstFewFN.size() < 5)
   {
     return 3;
   }
@@ -234,11 +201,10 @@ void copyGeneralToList(list<Data *> &l, Data* A[])
   int i = 0;
   for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
   {
-    (*it) = (A[i]);
+      (*it) = A[i];
     i++;
   }
 }
-
 
 void initializeArraySSN(list<Data *> &l)
 {
@@ -260,68 +226,18 @@ void initializeArrayList(list<Data *> &l)
   }
 }
 
-void initializeNodeArray(list<Data *> &l)
+bool comparatorT12(Data* a, Data* b)
 {
-  int i = 0;
-  for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
+  if (a->lastName != b->lastName)
   {
-    string first = (*it)->lastName;
-    char letter = first[0];
-    string smallSSN = (*it)->ssn;
-    smallSSN = smallSSN.substr(0,3);
-    Node *nodeptr = new Node( (*it) , letter, smallSSN);
-    NodeArray[i] = nodeptr;
-    i++;
+    return a->lastName < b->lastName;
   }
-}
-
-bool nameIsSame(Node* p1, Node* p2)
-{
-  if (p1->ptr->firstName == p2->ptr->firstName)
+  else if (a->firstName != b->firstName)
   {
-    return true;
-  }
-  return false;
-}
-
-bool comparatorT3(Node* a, Node* b)
-{
-  if (a->smallSSN != b->smallSSN)
-    return a->smallSSN < b->smallSSN;
-  else
-    return a->ptr->ssn < b->ptr->ssn;
-}
-
-
-bool comparatorT12(Node* a, Node* b)
-{
-  if (a->first != b->first)
-  {
-    return a->first < b->first;
-  }
-  else if ((a->ptr)->lastName != (b->ptr)->lastName)
-  {
-    return (a->ptr)->lastName < (b->ptr)->lastName;
-  }
-  else if ((a->ptr)->firstName != (b->ptr)->firstName)
-  {
-    return a->ptr->firstName < (b->ptr)->firstName;
+    return a->firstName < b->firstName;
   }
   else
   {
-    return (a->ptr)->ssn < (b->ptr)->ssn;
+    return a->ssn < b->ssn;
   }
 }
-
-void SortInPlaceNew(list<Data *> &l, Node* A[], int N)
-{
-  sort(A, A+N, comparatorT12);
-  int i = 0;
-
-  for (list<Data *>::iterator it = l.begin(); it != l.end(); it++)
-  {
-    (*it) = (A[i])->ptr;
-    i++;
-  }
-}
-

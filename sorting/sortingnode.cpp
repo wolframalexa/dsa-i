@@ -138,7 +138,7 @@ void SortInPlace(Data* A[], int a[], int N);
 void SortInPlaceNew(list<Data *> &l, Node* A[], int N);
 
 
-// void initializeNodeArray(list<Data *> &l);
+void initializeNodeArray(list<Data *> &l);
 
 Data* GeneralList[1100000] = {};
 list<Data *> NewList;
@@ -154,17 +154,10 @@ void sortDataList(list<Data *> &l) {
     case 1:
     case 2:
     case 3:
-//      initializeNodeArray(l);
- //     SortInPlaceNew(l, NodeArray, listsize);
-      break;
-
     case 4:
-    {
-      initializeArraySSN(l);
-      sort(SSNList,SSNList+listsize);
-      copySSNToList(l,SSNList);
+      initializeNodeArray(l);
+      SortInPlaceNew(l, NodeArray, listsize);
       break;
-    }
   }
 }
 
@@ -297,7 +290,7 @@ bool comparatorT12(Node* a, Node* b)
 
 void SortInPlace(Data* A[], int a[], int N)
 {
-  sort(A, A + N, comparatorT12);
+/*  sort(A, A + N, comparatorT12);
 
   for (int i = 0; i != N; i++)
   {
@@ -313,6 +306,7 @@ void SortInPlace(Data* A[], int a[], int N)
     A[j] = V;
     a[j] = j;
   }
+*/
 }
 
 
